@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	
+	<Task name="Fitter" type="Fitter" config="" nodePath="Fitter"  />
+	<mod>AuAu</mod>
+
+	<p>
+		<fitRange min="0.002" max="0.004" />
+		<useEff>true</useEff>
+	</p>
+	
+	<Fitter>
+		<input>
+			<TFile url="{mod}.root" name="data" />
+			<!-- <TFile url="auau_pt2_m0_stat.root" name="data" /> -->
+		</input>
+
+		<output>
+			<TFile url="fit_{mod}.root" />
+		</output>
+
+		<histograms>
+			<Histo name="meanPt2" title=";M_{ee} (GeV/c^{2}); #sqrt{p_{T}^{2} } (MeV/c)" bins_x="bins.massSlice" />
+			<Histo name="meanPt2Model" title=";M_{ee} (GeV/c^{2}); #sqrt{p_{T}^{2} } (MeV/c)" bins_x="bins.massSlice" />
+		</histograms>
+
+		
+	</Fitter>
+
+
+	<bins>
+		<mass min="0" max="4" width="0.001" />
+		<pt min="0" max="15.0" width="0.01" />
+		<pt2 min="0" max="0.5" width="0.0005" />
+		<!-- <pt2>
+			0.0000, 0.0010, 0.0020, 0.0030, 0.0040, 0.0050, 0.0060, 0.0070, 0.0080, 0.0090, 
+			0.0100, 0.0200, 0.0300, 0.0400, 0.0500, 0.0600, 0.0700, 0.0800, 0.0900,
+			0.1000, 0.2000, 0.3000, 0.4000, 0.5000
+		</pt2> -->
+
+		<massSlice> 0.4, 0.76, 1.2, 2.6 </massSlice>
+		<rap min="-2.0" max="2.0" width="0.1" />
+		<p min="-3.0" max="3.0" width="0.005" />
+		<dedx min="-15.0" max="15.0" width="0.005" />
+		<chi min="0" max="200.0" width="1" />
+
+		<deltaTof min="-15" max="15" width="0.01" />
+		<deltaTofe min="-50" max="50" width="0.01" />
+		<deltaLen min="-50" max="50" width="0.01" />
+	</bins>
+
+
+	<style>
+		<pt2 x-range="0, 0.02" x-title="p_{T}^{2} GeV/c^{2}" y-title="dN/dp_{T}^{2} (GeV/c^{2})^{-1}" marker-size="2" marker-style="8"  />
+	</style>
+
+</config>

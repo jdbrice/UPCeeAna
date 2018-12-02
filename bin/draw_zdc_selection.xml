@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	
+	<Data name="d11" url="fit_ZDC_Run11AuAu.root" />
+	<Data name="d10" url="fit_ZDC_Run10AuAu.root" />
+
+	<TCanvas width="1200" height="900" />
+	<Margins>0.05, 0.13, 0.13, 0.13</Margins>
+
+	<Plot>
+		<StatBox v="0" />
+		<Histo name="d11/hEWrb" draw="col" logz="1"/>
+		<TLine p1="0, 353" p2="376, 353" width="5" color="#000"  />
+		<TLine p1="376, 0" p2="376, 353" width="5" color="#000"  />
+
+		<Export url="plot_ZDC_1n1n_Run11AuAu.png" />
+	</Plot>
+
+	<Plot>
+		<StatBox v="0" />
+		<Histo name="d10/hEWrb" draw="col" logz="1"/>
+		<TLine p1="0, 288" p2="288, 288" width="5" color="#000"  />
+		<TLine p1="288, 0" p2="288, 288" width="5" color="#000"  />
+
+		<Export url="plot_ZDC_1n1n_Run10AuAu.png" />
+	</Plot>
+
+
+</config>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<Task name="MagPlotter" type="MagPlotter" config="" nodePath="MagPlotter"  />
+	
+	<drawFits>true</drawFits>
+	<drawSTARLight>true</drawSTARLight>
+
+	<MagPlotter>
+		<input>
+			<TFile url="AuAu.root" />
+		</input>
+
+		<output>
+			<TFile url="MagPlotter.root" />
+		</output>
+		<histograms></histograms>
+	</MagPlotter>
+
+
+	<style>
+		<hUU6080 marker-size="2" line-width="2" line-color="#000" marker-style="24" marker-color="#000" min="1050" max="3000" yto="1.2" topxaxis="1" rightyaxis="1" />
+		<hUU4060 marker-size="2" line-width="2" line-color="#000" marker-style="26" marker-color="#000" />
+		<hAuAu6080 marker-size="2" line-width="2" line-color="#000" marker-style="20" marker-color="#000" />
+		<hAuAu4060 marker-size="2" line-width="2" line-color="#000" marker-style="22" marker-color="#000" />
+		
+		<hUPC2004 marker-size="2" line-width="2" line-color="#000" marker-style="21" marker-color="#000" />
+		<hUPCUU marker-size="3" line-width="2" line-color="#000" marker-style="30" marker-color="#000" />
+		<hUPCAuAu marker-size="3" line-width="2" line-color="#000" marker-style="29" marker-color="#000" />
+
+		<hUPCJPsi marker-size="3" line-width="2" line-color="#000" marker-style="29" marker-color="#00F" />
+		<hAuAuJPsi marker-size="2" line-width="2" line-color="#000" marker-style="20" marker-color="#00F" />
+		<hUUJPsi marker-size="2" line-width="2" line-color="#000" marker-style="24" marker-color="#00F" />
+
+		<hZha marker-size="3" line-width="2" line-color="#000" marker-style="29" marker-color="#F00" />
+		<hSLAuAu marker-size="3" line-width="2" line-color="#F00" marker-style="29" marker-color="#F00" />
+		<hSLUU marker-size="3" line-width="2" line-color="#00F" marker-style="29" marker-color="#00F" />
+
+		<hCLffAuAu fill-color-alpha="#F00, 0.3" line-color="#F00" marker-color="#F00"/>
+		<hCLffUU fill-color-alpha="#00F, 0.3" line-color="#00F" marker-color="#00F"/>
+
+		<ffAuAu line-color="#F00" line-wdith="2" />
+		<ffUU line-color="#00F" line-wdith="2" />
+	</style>
+
+</config>

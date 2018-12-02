@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<Data name="d1011" url="fit_AuAu.root" />
+	<Data name="d10" url="fit_Run10AuAu.root" />
+	<Data name="d11" url="fit_Run11AuAu.root" />
+	<Data name="d12" url="fit_Run12UU.root" />
+
+	<!-- <Data name="sl" url="../../STARLight2PairDst/bin/SL_AuAu_and_UU_curves.root" /> -->
+	
+
+	<TCanvas width="1900" height="1600" />
+	<Margins>0.05, 0.05, 0.13, 0.13</Margins>
+	
+	<Plot>
+		<Axes lsx="0, 3, 30" lsy="30, 50, 1" y-title="#sqrt{ <p_{T}^{2}> }" x-title="M_{ee} (GeV/c^{2})" />
+		<StatBox v="0" />
+		<Histo name="d12/meanPt2" draw="same pe" lc="#000" marker-style="8" marker-size="3" marker-color="#000" yr="30, 50" />
+		<Histo name="d11/meanPt2" draw="same pe" lc="#F00" marker-style="8" marker-size="3" marker-color="#F00"  />
+		<Histo name="d1011/meanPt2" draw="same pe" lc="#00F" marker-style="8" marker-size="3" marker-color="#00F"  />
+
+		
+		<!-- <Histo name="sl/hslAuAu" draw="same l" lc="#F0F" line-style="1" line-width="2" xr="0.4, 2.6"/> -->
+		<!-- <Histo name="sl/hslUU" draw="same l" lc="#F0F" line-style="2" line-width="2" xr="0.4, 2.6"/> -->
+		
+		<Histo name="d12/meanPt2Model" draw="same l" lc="#F0F" line-style="1" line-width="2" />
+
+		<Legend border-size="0" fill-style="0">
+			<Position pos="top left" padding="0.01, 0, 0, 0.04" h="0.3" w="0.5"/>
+			<Entry name="d12/meanPt2Model" title="#gamma#gamma #rightarrow ee (Zha et al.) 60-80% Au+Au" opt="pe" />
+
+
+			<Entry name="d1011/meanPt2" title="Au+Au (10+11)" opt="pe" />
+			<Entry name="d11/meanPt2" title="Au+Au (11)" opt="pe" />
+			<Entry name="d12/meanPt2" title="U+U" opt="pe" />
+		</Legend>
+
+		<Export url="meanPt2.pdf" />
+	</Plot>
+
+</config>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<mod>Run11AuAu</mod>
+	<Data name="d" url="{mod}.root" />
+
+	<TCanvas width="1900" height="1200" />
+	<Margins>0.05, 0.05, 0.12, 0.12</Margins>
+
+	<Transform>
+		<Projection axis="x" save_as="huls" name="uls" />
+		<Projection axis="x" save_as="hulsid" name="ulsid" />
+		<Projection axis="x" save_as="hulsid2" name="ulsid2" />
+	</Transform>
+
+	<Transform>
+		<Projection axis="y" save_as="hptA" name="ulsid2" x1="0.4" x2="0.76" />
+		<Projection axis="y" save_as="hptB" name="ulsid2" x1="0.76" x2="1.2" />
+		<Projection axis="y" save_as="hptC" name="ulsid2" x1="1.2" x2="2.6" />
+	</Transform>
+
+	<Transform>
+		<Projection axis="y" save_as="hrapA" name="rapid2" x1="0.4" x2="0.76" />
+		<Projection axis="y" save_as="hrapB" name="rapid2" x1="0.76" x2="1.2" />
+		<Projection axis="y" save_as="hrapC" name="rapid2" x1="1.2" x2="2.6" />
+	</Transform>
+
+	<Transform>
+		<Projection axis="y" save_as="hpt2A" name="pt2id2" x1="0.4" x2="0.76" />
+		<Projection axis="y" save_as="hpt2B" name="pt2id2" x1="0.76" x2="1.2" />
+		<Projection axis="y" save_as="hpt2C" name="pt2id2" x1="1.2" x2="2.6" />
+	</Transform>
+
+	<Transform>
+		<Rebin save_as="rbuls" name="huls" bins_x="mass" />
+		<Rebin save_as="rbulsid" name="hulsid" bins_x="mass"/>
+		<Rebin save_as="rbulsid2" name="hulsid2" bins_x="mass"/>
+
+		<Scale  save_as="hspt2A" name="hpt2A" opt="width" />
+		<Scale  save_as="hspt2B" name="hpt2B" opt="width" />
+		<Scale  save_as="hspt2C" name="hpt2C" opt="width" />
+	</Transform>
+
+	<Plot>
+		<StatBox v="0" />
+		<Histo name="rbuls" draw=" hpe" lc="#000" logy="1" x-title="M_{ee} (GeV/c^{2})" y-title="dN/dM_{ee} (GeV/c^{2})^{-1}"/>
+		<Histo name="rbulsid" draw="same hpe" lc="#00F" />
+		<Histo name="rbulsid2" draw="same  hpe" lc="#F00" />
+
+		<Legend border-size="0" title="Electron ID">
+			<Position pos="top right" width="0.4" h="0.3" padding="0.01, 0.01, 0, 0"/>
+
+			<Entry name="rbuls" title="None" opt="l" />
+			<Entry name="rbulsid" title="dE/dx" opt="l" />
+			<Entry name="rbulsid2" title="dE/dx + TOF" opt="l" />
+		</Legend>
+
+		<Export url="{mod}_invmass.pdf" />
+	</Plot>
+
+	<Plot>
+		<Histo name="hptA" marker-style="8" marker-color="#000" draw="pe "  lc="#000" xr="0, 0.3" title="" x-title="p_{T}^{ee} (GeV/c)" y-title="dN/dp_{T} (GeV/c)^{-1}" />
+		<Histo name="hptB" marker-style="8" marker-color="#F00" draw="pe same " lc="#F00" />
+		<Histo name="hptC" marker-style="8" marker-color="#00F" draw="pe same " lc="#00F" />
+
+		<Legend border-size="0" >
+			<Position pos="top right" padding="0.01, 0.01, 0, 0" />
+			<Entry name="hptA" title="0.40-0.76 GeV/c^{2}" opt="lpe" />
+			<Entry name="hptB" title="0.76-1.2 GeV/c^{2}" opt="lpe" />
+			<Entry name="hptC" title="1.2-2.6 GeV/c^{2}" opt="lpe" />
+		</Legend>
+
+		<Export url="{mod}_pairPt.pdf" />
+	</Plot>
+
+
+	<Plot>
+		<Histo name="hrapA" marker-style="8" marker-color="#000" draw="pe "  lc="#000" xr="-1.0, 1.05" max="5e-3" title="" x-title="Pair Rapidity, y^{ee}" y-title="dN/dy^{ee}" />
+		<Histo name="hrapB" marker-style="8" marker-color="#F00" draw="pe same " lc="#F00" />
+		<Histo name="hrapC" marker-style="8" marker-color="#00F" draw="pe same " lc="#00F" />
+
+		<Legend border-size="0" >
+			<Position pos="top right" padding="0.01, 0.01, 0, 0" />
+			<Entry name="hrapA" title="0.40-0.76 GeV/c^{2}" opt="lpe" />
+			<Entry name="hrapB" title="0.76-1.2 GeV/c^{2}" opt="lpe" />
+			<Entry name="hrapC" title="1.2-2.6 GeV/c^{2}" opt="lpe" />
+		</Legend>
+
+		<Export url="{mod}_pairRapidity.pdf" />
+	</Plot>
+
+	<Plot>
+		<Histo name="hspt2A" marker-style="8" marker-size="3" marker-color="#000" draw="pe" lc="#000" title="" x-title="p_{T}^{2} (GeV/c)^{2}" y-title="dN/dp_{T}^{2} (GeV/c)^{-2}" min="1e-6" />
+		<Histo name="hspt2B" marker-style="8" marker-size="3" marker-color="#F00" draw="pe same " lc="#F00" />
+		<Histo name="hspt2C" marker-style="8" marker-size="3" marker-color="#00F" draw="pe same " lc="#00F" />
+
+		<Legend border-size="0" >
+			<Position pos="top right" padding="0.01, 0.01, 0, 0" />
+			<Entry name="hspt2A" title="0.40-0.76 GeV/c^{2}" opt="lpe" />
+			<Entry name="hspt2B" title="0.76-1.2 GeV/c^{2}" opt="lpe" />
+			<Entry name="hspt2C" title="1.2-2.6 GeV/c^{2}" opt="lpe" />
+		</Legend>
+
+		<Export url="{mod}_pairPt2.pdf" />
+	</Plot>
+
+	<Plot>
+		<Histo name="hspt2A" marker-style="8" marker-size="3" marker-color="#000" draw="pe" lc="#000" title="" x-title="p_{T}^{2} (GeV/c)^{2}" y-title="dN/dp_{T}^{2} (GeV/c)^{-2}" min="1e-6" xr="0, 0.05" />
+		<Histo name="hspt2B" marker-style="8" marker-size="3" marker-color="#F00" draw="pe same " lc="#F00" />
+		<Histo name="hspt2C" marker-style="8" marker-size="3" marker-color="#00F" draw="pe same " lc="#00F" />
+
+		<Legend border-size="0" >
+			<Position pos="top right" padding="0.01, 0.01, 0, 0" />
+			<Entry name="hspt2A" title="0.40-0.76 GeV/c^{2}" opt="lpe" />
+			<Entry name="hspt2B" title="0.76-1.2 GeV/c^{2}" opt="lpe" />
+			<Entry name="hspt2C" title="1.2-2.6 GeV/c^{2}" opt="lpe" />
+		</Legend>
+
+		<Export url="{mod}_pairPt2_zoom.pdf" />
+	</Plot>
+
+
+	<mass min="0" max="4" width="0.015" />
+
+</config>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	
+	<mod>Run12UU</mod>
+	<title>@titles.{mod}</title>
+	<Task name="ZDCFitterUU" type="ZDCFitterUU" config="" nodePath="ZDCFitterUU"  />
+	<!-- <mod>AuAu</mod> -->
+
+
+	<ZDCFitterUU>
+		<input>
+			<TFile url="{mod}.root" name="data" />
+		</input>
+
+		<output>
+			<TFile url="fit_ZDC_{mod}.root" />
+		</output>
+
+		<histograms>
+			
+		</histograms>
+
+		
+	</ZDCFitterUU>
+
+
+	<style>
+		<hist axisdigits="4" line-width="2" line-color="#00F" min="0.001" xr="0, 1300"/>
+		<fitsum line-width="2" line-color="#000" npx="1000" />
+		<fgnUU1 line-width="2" line-color="#F00" />
+		<fgnUU2 line-width="2" line-color="#33A" />
+		<fgnUU3 line-width="2" line-color="#0F0" />
+		<fgnUU4 line-width="2" line-color="#F0F" />
+	</style>
+
+	<titles>
+		<Run12UU>Run12 U+U</Run12UU>
+		<Run11AuAu>Run11 Au+Au</Run11AuAu>
+		<Run10AuAu>Run10 Au+Au</Run10AuAu>
+	</titles>
+
+
+</config>
