@@ -145,7 +145,7 @@ public:
 		lt.DrawLatexNDC( .5, .7, TString::Format( "fit: #sqrt{<pT^{2}>} = %0.2f #pm %0.2f MeV/c", (1000*fm0spt2), (1000*fm0spt2e) ) );
 		lt.DrawLatexNDC( .5, .63, TString::Format( "data+fit: #sqrt{<pT^{2}>} = %0.3f MeV/c", (1000*m0spt2) ) );
 		gPad->SetLogy(1);
-		can->Print( Form( "%s_%s_fit0.pdf", config.get<string>("mod").c_str(), effMod.Data() ) );
+		can->Print( Form( "%s_%s_fit0.pdf", (config.get<string>("mod")+config.get<string>("ver")).c_str(), effMod.Data() ) );
 		
 
 		// Second mass bin
@@ -164,7 +164,7 @@ public:
 		lt.DrawLatexNDC( .5, .63, TString::Format( "data+fit: #sqrt{<pT^{2}>} = %0.3f MeV/c", (1000*m1spt2) ) );
 		
 		gPad->SetLogy(1);
-		can->Print( Form( "%s_%s_fit1.pdf", config.get<string>("mod").c_str(), effMod.Data() ) );
+		can->Print( Form( "%s_%s_fit1.pdf", (config.get<string>("mod")+config.get<string>("ver")).c_str(), effMod.Data() ) );
 
 
 		can->Clear();
@@ -185,7 +185,7 @@ public:
 		lt.DrawLatexNDC( .5, .63, TString::Format( "data+fit: #sqrt{<pT^{2}>} = %0.3f MeV/c", (1000*m2spt2) ) );
 		// gPad->SetLogy(1);
 		can->Update();
-		can->Print( Form( "%s_%s_fit2.pdf", config.get<string>("mod").c_str(), effMod.Data() ) );
+		can->Print( Form( "%s_%s_fit2.pdf", (config.get<string>("mod")+config.get<string>("ver")).c_str(), effMod.Data() ) );
 		
 
 		cout << "Mean pt2 = " << m0spt2 << ", fit = " << fm0spt2 << ", hist = " << hms0->GetMean() << endl;

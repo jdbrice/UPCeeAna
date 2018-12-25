@@ -107,6 +107,12 @@ public:
 	TCanvas * can = nullptr;
 	TCanvas * can2 = nullptr;
 
+	double lambda1 = -1;
+	double sigma1 = -1;
+
+	double lambda2 = -1;
+	double sigma2 = -1;
+
 
 	virtual void initialize(){
 		HistoAnalyzer::initialize();
@@ -128,6 +134,9 @@ public:
 
 
 	void fitZDC( string name, TH1 * h, string note = "" ){
+		cout <<  "#####################################################" << endl;
+		cout <<  "################" << name << ":" << note <<  endl;
+		cout <<  "#####################################################" << endl;
 
 		RooPlotLib rpl;
 		rpl.link( &config );
@@ -140,7 +149,7 @@ public:
 		// 	fitType = 1;
 
 		if ( 0 == fitType){
-			fZDC = new TF1( fitName, zdc_UU_multi_gaus, 35, 1200, 11 );
+			fZDC = new TF1( fitName, zdc_UU_multi_gaus, 30, 1200, 11 );
 			//                       0,   1,  2,     3,   4,     5,   6,     7,    8
 			fZDC->SetParameters( 80000, 51, 5, 20000, 410, 60, 0.5 );
 
@@ -156,10 +165,16 @@ public:
 			fZDC->SetParLimits( 7, 100, 300 );
 			fZDC->SetParLimits( 8, 20, 300 );
 			fZDC->SetParLimits( 9, 0, 1000 );
+
+			// if ( lambda1 > 0 )
+			// 	fZDC->FixParameter( 1, lambda1 );
+			// if ( sigma1 > 0 )
+				// fZDC->FixParameter( 2, sigma1 );
 			
 			
 			
-			h->Fit( fZDC, "RNL", "", 35, 1200 );
+			h->Fit( fZDC, "RNL", "", 30, 1200 );
+			h->Fit( fZDC, "RN", "", 30, 1200 );
 		}
 
 		if ( 1 == fitType ){
@@ -254,22 +269,22 @@ public:
 		tl.SetTextFont( 42 );
 		tl.SetTextSize( 12 / 360.0 );
 		if ( 0 == fitType ){
-			tl.DrawLatexNDC( 0.5, 0.85, TString::Format( "A1 = %0.0f #pm %0.0f", fZDC->GetParameter( 0 ), fZDC->GetParError( 0 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.82, TString::Format(  "#lambda1 = %0.1f #pm %0.1f", fZDC->GetParameter( 1 ), fZDC->GetParError( 1 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.79, TString::Format( "#sigma1 = %0.1f #pm %0.1f", fZDC->GetParameter( 2 ), fZDC->GetParError( 2 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.76, TString::Format( "A2 = %0.0f #pm %0.0f", fZDC->GetParameter( 3 ), fZDC->GetParError( 3 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.73, TString::Format(  "#lambda2 = %0.1f #pm %0.1f", fZDC->GetParameter( 4 ), fZDC->GetParError( 4 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.70, TString::Format( "#sigma2 = %0.0f #pm %0.0f", fZDC->GetParameter( 5 ), fZDC->GetParError( 5 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.67, TString::Format(  "A3 = %0.1f #pm %0.1f", fZDC->GetParameter( 6 ), fZDC->GetParError( 6 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.64, TString::Format( "#lambda43 = %0.0f #pm %0.0f", fZDC->GetParameter( 7 ), fZDC->GetParError( 7 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.61, TString::Format(  "#sigma3 = %0.1f #pm %0.1f", fZDC->GetParameter( 8 ), fZDC->GetParError( 8 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.57, TString::Format(  "k3 = %0.3f #pm %0.3f", fZDC->GetParameter( 9 ), fZDC->GetParError( 9 ) ) );
-			tl.DrawLatexNDC( 0.5, 0.54, TString::Format(  "p0 = %0.1f #pm %0.1f", fZDC->GetParameter( 10 ), fZDC->GetParError( 10 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.85, TString::Format( "A1 = %0.0f #pm %0.0f", fZDC->GetParameter( 0 ), fZDC->GetParError( 0 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.82, TString::Format(  "#lambda1 = %0.1f #pm %0.1f", fZDC->GetParameter( 1 ), fZDC->GetParError( 1 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.79, TString::Format( "#sigma1 = %0.1f #pm %0.1f", fZDC->GetParameter( 2 ), fZDC->GetParError( 2 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.76, TString::Format( "A2 = %0.0f #pm %0.0f", fZDC->GetParameter( 3 ), fZDC->GetParError( 3 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.73, TString::Format(  "#lambda2 = %0.1f #pm %0.1f", fZDC->GetParameter( 4 ), fZDC->GetParError( 4 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.70, TString::Format( "#sigma2 = %0.0f #pm %0.0f", fZDC->GetParameter( 5 ), fZDC->GetParError( 5 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.67, TString::Format(  "A3 = %0.1f #pm %0.1f", fZDC->GetParameter( 6 ), fZDC->GetParError( 6 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.64, TString::Format( "#lambda43 = %0.0f #pm %0.0f", fZDC->GetParameter( 7 ), fZDC->GetParError( 7 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.61, TString::Format(  "#sigma3 = %0.1f #pm %0.1f", fZDC->GetParameter( 8 ), fZDC->GetParError( 8 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.57, TString::Format(  "k3 = %0.3f #pm %0.3f", fZDC->GetParameter( 9 ), fZDC->GetParError( 9 ) ) );
+			tl.DrawLatexNDC( 0.6, 0.54, TString::Format(  "p0 = %0.1f #pm %0.1f", fZDC->GetParameter( 10 ), fZDC->GetParError( 10 ) ) );
 
-			tl.DrawLatexNDC( 0.5, 0.50, TString::Format("#chi^2 / ndf = %0.2f / %d = %0.2f", fZDC->GetChisquare(), fZDC->GetNDF(), fZDC->GetChisquare() / (float)fZDC->GetNDF() ) );
+			tl.DrawLatexNDC( 0.6, 0.50, TString::Format("#chi^2 / ndf = %0.2f / %d = %0.2f", fZDC->GetChisquare(), fZDC->GetNDF(), fZDC->GetChisquare() / (float)fZDC->GetNDF() ) );
 
 			if ( "" != note )
-				tl.DrawLatexNDC( 0.5, 0.46, TString::Format(  "Other ZDC #approx %s", note.c_str() ) );
+				tl.DrawLatexNDC( 0.6, 0.46, TString::Format(  "Other ZDC #approx %s", note.c_str() ) );
 		}
 
 
@@ -300,11 +315,33 @@ public:
 		can->Print( TString::Format("%s_%s%sFit.pdf", config.get<string>( "mod" ).c_str(), name.c_str(), note.c_str() ) );
 
 
+		h->GetXaxis()->SetRangeUser( 1, 150 );
+		double cl = 31;
+		TLine * cutLow = new TLine( cl, 0, cl, fZDC->GetParameter(0) );
+		cutLow->SetLineColor( kGray + 2);
+		cutLow->Draw("same");
+
+		double ch = fZDC->GetParameter(1) + fZDC->GetParameter(2) * 2;
+		TLine * cutHigh = new TLine( ch, 0, ch, fZDC->GetParameter(0) );
+		cutHigh->SetLineColor( kGray + 2);
+		cutHigh->Draw("same");
+
+		can->Print( TString::Format("%s_%s%sFit_Selected.pdf", config.get<string>( "mod" ).c_str(), name.c_str(), note.c_str() ) );
+
+		cout << "purity: " << fgnUU1->Integral(cl, ch) / fZDC->Integral( cl, ch ) << endl;
+		cout << "efficiency: " << fgnUU1->Integral(cl, ch) / fgnUU1->Integral(0, 1000) << endl;
+
+
 		cout << "Boundaries:" << endl;
 		cout << "1n < " << (fZDC->GetParameter( 1 ) + fZDC->GetParameter( 4 ))/2.0 << endl;
 		cout << "2n:" << (fZDC->GetParameter( 1 ) + fZDC->GetParameter( 4 ))/2.0 << " - " << (fZDC->GetParameter( 4 ) + fZDC->GetParameter( 6 ))/2.0 << endl;
 		cout << "3n:" << (fZDC->GetParameter( 4 ) + fZDC->GetParameter( 6 ))/2.0 << " - " << (fZDC->GetParameter( 6 ) + fZDC->GetParameter( 8 ))/2.0 << endl;
 		cout << "4n > " << (fZDC->GetParameter( 6 ) + fZDC->GetParameter( 8 ))/2.0 << endl;
+
+		if ( "" == note ){
+			lambda1 = fZDC->GetParameter(1);
+			sigma1 = fZDC->GetParameter(2);
+		}
 
 		fZDC->Write();
 
@@ -333,7 +370,7 @@ public:
 
 		// TH2 * hEW = get<TH2>( "ZDCEastWestAnalyzed" );
 		TH2 * hEW = get<TH2>( "ZDCEastWest" );
-		
+		// 
 
 		gStyle->SetOptStat(0);
 
@@ -417,15 +454,17 @@ public:
 
 
 		fitZDC( "ZDCEast", h1E );
-		fitZDC( "ZDCWest", h1W );
 
 		fitZDC( "ZDCEast", h1E1n, "1n" );
-		fitZDC( "ZDCWest", h1W1n, "1n" );
-
 		fitZDC( "ZDCEast", h1E2n, "2n" );
-		fitZDC( "ZDCWest", h1W2n, "2n" );
-
 		fitZDC( "ZDCEast", h1E3n, "3n" );
+
+		lambda1 = -1;
+		sigma1 = -1;
+
+		fitZDC( "ZDCWest", h1W );
+		fitZDC( "ZDCWest", h1W1n, "1n" );
+		fitZDC( "ZDCWest", h1W2n, "2n" );
 		fitZDC( "ZDCWest", h1W3n, "3n" );
 
 		// fitZDC( "ZDCEast", h1E4n, "4n" );

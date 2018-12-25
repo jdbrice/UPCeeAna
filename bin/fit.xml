@@ -3,6 +3,7 @@
 	
 	<Task name="Fitter" type="Fitter" config="" nodePath="Fitter"  />
 	<mod>AuAu</mod>
+	<ver></ver>
 
 	<p>
 		<fitRange min="0.002" max="0.004" />
@@ -11,12 +12,12 @@
 	
 	<Fitter>
 		<input>
-			<TFile url="{mod}.root" name="data" />
+			<TFile url="{mod}{ver}.root" name="data" />
 			<!-- <TFile url="auau_pt2_m0_stat.root" name="data" /> -->
 		</input>
 
 		<output>
-			<TFile url="fit_{mod}.root" />
+			<TFile url="fit_{mod}{ver}.root" />
 		</output>
 
 		<histograms>

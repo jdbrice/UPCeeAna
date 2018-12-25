@@ -38,9 +38,16 @@ protected:
 	float ZDCMin = 0;
 	float ZDCMax = 0;
 
+	float ZDCEastMin = 0;
+	float ZDCEastMax = 0;
+	float ZDCWestMin = 0;
+	float ZDCWestMax = 0;
+
 	TH2 * hEffRc = nullptr;
 	TH2 * hEffMc = nullptr;
 	TH2 * hEff   = nullptr;
+	TH2 * hRapEff  = nullptr;
+	TH3 * hEff3D  = nullptr;
 
 	
 
@@ -58,25 +65,27 @@ public:
 		dTofCut = config.get<float>( "p.dTofCut", 0.2 );
 		XeeCut = config.get<float>( "p.XeeCut", 5 );
 
-		// ZDCEastMin = config.get<float>( "p.ZDCEast:min", 50 );
-		// ZDCEastMax = config.get<float>( "p.ZDCEast:max", 1200 );
+		ZDCEastMin = config.get<float>( "p.ZDCEast:min", 50 );
+		ZDCEastMax = config.get<float>( "p.ZDCEast:max", 1200 );
 
-		// ZDCWestMin = config.get<float>( "p.ZDCWest:min", 50 );
-		// ZDCWestMax = config.get<float>( "p.ZDCWest:max", 1200 );
+		ZDCWestMin = config.get<float>( "p.ZDCWest:min", 50 );
+		ZDCWestMax = config.get<float>( "p.ZDCWest:max", 1200 );
 
-		string ZDCMode = config.get<string>( "p.ZDCMode", "all" );
-		ZDCMin = 50;
-		ZDCMax = 1200;
-		if ( "1n1n" == ZDCMode ){
-			ZDCMax = 300;
-		} else if ( "XnXn" == ZDCMode ){
-			ZDCMin = 300;
-		}
+		// string ZDCMode = config.get<string>( "p.ZDCMode", "all" );
+		// ZDCMin = 50;
+		// ZDCMax = 1200;
+		// if ( "1n1n" == ZDCMode ){
+		// 	ZDCMax = 300;
+		// } else if ( "XnXn" == ZDCMode ){
+		// 	ZDCMin = 300;
+		// }
 
 		LOG_F( INFO, "dTofCut = %f", dTofCut );
 		LOG_F( INFO, "XeeCut = %f", XeeCut );
 
-		LOG_F( INFO, "ZDC Cuts = ( %f, %f )", ZDCMin, ZDCMax );
+		// LOG_F( INFO, "ZDC Cuts = ( %f, %f )", ZDCMin, ZDCMax );
+		LOG_F( INFO, "ZDCEast Cuts = ( %f, %f )", ZDCEastMin, ZDCEastMax );
+		LOG_F( INFO, "ZDCWest Cuts = ( %f, %f )", ZDCWestMin, ZDCWestMax );
 
 		// if ( "Run12UU" == config.get<string>("mod") )
 		// 	ScaleFactor = 1.0 / 5.50807e6;
@@ -94,6 +103,24 @@ public:
 		hEffRc = (TH2*)f->Get("hRCvirtualphotoneehistRun10");
 		hEff = (TH2*)hEffRc->Clone( "hTpcEff" );
 		hEff->Divide( hEffMc );
+
+		LOG_F( INFO, "Making 3D eff factor" );
+		TFile *fRap = new TFile( "/Users/jdb/bnl/work/upc/data/lowPt_EffvsRapidity_Cen6080.root" );
+		TH3 * hRap3EffMc = (TH3*)fRap->Get("hMCAcc1MeevsPtvsRapidity_loweePt");
+		TH3 * hRap3EffRc = (TH3*)fRap->Get("hRCAcc1MeevsPtvsRapidityRun10_loweePt");
+		LOG_F( INFO, "3D eff tables: %p, %p", hRap3EffMc, hRap3EffRc );
+		TH2 * hRap2EffMc = (TH2*)hRap3EffMc->Project3D("xy")->Clone("hRap2EffMc");
+		TH2 * hRap2EffRc = (TH2*)hRap3EffRc->Project3D("xy")->Clone("hRap2EffRc");
+
+		// 2D histo is (pT, rap) = (x, y)
+		hRapEff = (TH2*)hRap2EffRc->Clone( "hTpcEffRap" );
+		hRapEff->Divide( hRap2EffMc );
+
+		// 3D histo is (rap, pT, mass) = (x, y, z)
+		hEff3D = (TH3*)hRap3EffRc->Clone("hEff3D");
+		hEff3D->Divide( hRap3EffMc );
+
+
 		
 		book->cd();
 
@@ -116,6 +143,23 @@ protected:
 
 	}
 
+	float tpcEfficiencyWeight( float p, float m, float y ){
+
+		TAxis * ax = hEff3D->GetXaxis();
+		TAxis * ay = hEff3D->GetYaxis();
+		TAxis * az = hEff3D->GetZaxis();
+
+		int iX = ax->FindBin( y );
+		int iY = ay->FindBin( p );
+		int iZ = az->FindBin( m );
+
+		float v = ( hEff3D->GetBinContent( iX, iY, iZ ) );
+		if ( 0 == v || 1.0/v != 1.0/v )
+			return 0;
+		return 1.0 / ( hEff3D->GetBinContent( iX, iY, iZ ) );
+
+	}
+
 	virtual void analyzeEvent(){
 		FemtoPair * pair = this->_fpr.get();
 
@@ -132,7 +176,7 @@ protected:
 		book->fill( "ZDCEast", pair->mZDCEast );
 		book->fill( "ZDCWest", pair->mZDCWest );
 		book->fill( "ZDCEastWest", pair->mZDCEast, pair->mZDCWest );
-		// if ( pair->mZDCEast < ZDCMin || pair->mZDCEast > ZDCMax || pair->mZDCWest < ZDCMin || pair->mZDCWest > ZDCMax ) return;
+		if ( pair->mZDCEast < ZDCEastMin || pair->mZDCEast > ZDCEastMax || pair->mZDCWest < ZDCWestMin || pair->mZDCWest > ZDCWestMax ) return;
 		// if ( abs(pair->mVertexZ) > 50 ) return;
 		book->fill( "ZDCEastWestSelected", pair->mZDCEast, pair->mZDCWest );
 
@@ -142,6 +186,9 @@ protected:
 
 		// if ( pair->d1_mMatchFlag == 0 || pair->d2_mMatchFlag == 0 ) return;
 		if ( pair->d1_mPt  < 0.200 || pair->d2_mPt < 0.200 || abs( pair->d1_mEta ) > 1.0 || abs( pair->d2_mEta ) > 1.0 ) return;
+		if ( pair->d1_mDCA > 1.0 ) return; 
+		if ( pair->d2_mDCA > 1.0 ) return; 
+
 		book->fill( "events", 3 );
 
 		if ( abs(lv.Rapidity()) > 1 ) return;
@@ -161,8 +208,8 @@ protected:
 		double tofe2 = sqrt( l2*l2 / (c_light*c_light) * ( 1 + (m_electron*m_electron)/(p2*p2) ) );
 		double dTofe = tofe1 - tofe2;
 
-		if ( pair->d1_mMatchFlag == 0 || pair->d2_mMatchFlag == 0 )
-			return;
+		// if ( pair->d1_mMatchFlag == 0 || pair->d2_mMatchFlag == 0 )
+		// 	return;
 
 		if ( abs(dTof) < 0.0001 || pair->d1_mMatchFlag == 0 || pair->d2_mMatchFlag == 0 ){
 			dTof = 999;
@@ -187,6 +234,20 @@ protected:
 
 				if ( pair->d1_mTof > 0 && pair->d2_mTof > 0 ){
 					book->fill( "ulsidtof", lv.M(), lv.Pt() );
+				}
+
+				if ( pair->d1_mMatchFlag > 0 || pair->d2_mMatchFlag > 0 )
+					book->fill( "mass1tof", lv.M() );
+				if ( pair->d1_mMatchFlag > 0 && pair->d2_mMatchFlag > 0 )
+					book->fill( "mass2tof", lv.M() );
+
+				if ( lv.M() < 0.4 ){
+					if ( pair->d1_mMatchFlag > 0 && pair->d1_mTof > 0 ){
+						book->fill( "pt1tof", pair->d2_mPt );
+					}
+					if ( pair->d1_mMatchFlag > 0 && pair->d1_mTof > 0 && pair->d2_mMatchFlag > 0 && pair->d2_mTof > 0){
+						book->fill( "pt2tof", pair->d2_mPt );
+					}
 				}
 			}
 
@@ -229,9 +290,24 @@ protected:
 				book->fill( "rapid2", lv.M(), lv.Rapidity(), ScaleFactor );
 				book->fill( "pt2id2", lv.M(), lv.Pt() * lv.Pt(), ScaleFactor );
 
-				book->fill( "wulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.P(), lv.M() ) );
-				book->fill( "wrapid2", lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.P(), lv.M() ) );
-				book->fill( "wpt2id2", lv.M(), lv.Pt() * lv.Pt(), tpcEfficiencyWeight( lv.P(), lv.M() ) );
+				book->fill( "wulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				book->fill( "wrapid2", lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				book->fill( "wpt2id2", lv.M(), lv.Pt() * lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+
+				// LOG_F( INFO, "3D eff factor (%f, %f, %f) = %f", lv.Pt(), lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() ) );
+				float e3d = tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() );
+				book->fill( "w3ulsid2", lv.M(), lv.Pt(), e3d );
+				book->fill( "w3rapid2", lv.M(), lv.Rapidity(), e3d );
+				book->fill( "w3pt2id2", lv.M(), lv.Pt() * lv.Pt(), e3d );
+
+				TLorentzVector lvPositron = lv2;
+				lvPositron.Boost( -(lv.BoostVector()) );
+				TVector3 vbeam(0, 0, 1.0);
+
+				TVector3 vPositron( lvPositron.Px(), lvPositron.Py(), lvPositron.Pz() );
+				float costheta = cos( vPositron.Angle( vbeam ) );
+
+				book->fill( "w3costhetaid2", lv.M(), abs(costheta), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
 
 				book->fill( "chipidcutSel", xpipi, xee );
@@ -241,6 +317,31 @@ protected:
 				double asym = fabs( ( lv1.Pt() - lv2.Pt() ) / (lv1.Pt() + lv2.Pt()) ); 
 				book->fill( "aco", lv.M(), aco );
 				book->fill( "asym", lv.M(), asym );
+
+				if ( lv.M() > 0.4 && lv.M() < 3.0 ){
+					
+					TVector3 vParent( lv.Px(), lv.Py(), lv.Pz() );
+					TVector3 vD1( lv1.Px(), lv1.Py(), lv1.Pz() );
+					TVector3 vD2( lv2.Px(), lv2.Py(), lv2.Pz() );
+					
+					book->fill( "deltaPhi_pd1", lv1.DeltaPhi( lv ) );
+					book->fill( "deltaPhi_pd2", lv.DeltaPhi( lv2 ) );
+
+					book->fill( "deltaAngle_pd1", vD2.Angle( vD1 ) );
+					book->fill( "deltaAngle_pd2", vParent.Angle( vD2 ) );
+
+					// if ( lv.Pt() < 0.01 ) {
+					// 	LOG_F( INFO, "d1: pt = %f, px = %f, %f, %f", lv1.Pt(), lv1.Px(), lv1.Py(), lv1.Pz() );
+					// 	LOG_F( INFO, "d2: pt = %f, px = %f, %f, %f", lv2.Pt(), lv2.Px(), lv2.Py(), lv2.Pz() );
+					// }
+				}
+
+				book->fill( "mDCA", pair->d1_mDCA );
+				book->fill( "mDCA", pair->d2_mDCA );
+
+				book->fill( "mNHitsFit", pair->d2_mNHitsFit );
+				book->fill( "mNHitsFit", pair->d2_mNHitsFit );
+				
 				// LOG_F( INFO, "lv1.Phi()=%f, lv2.Phi()=%f, deltaPhi/pi=%f", lv1.Phi(), lv2.Phi(), aco );
 				// LOG_F( INFO, "asym=%f", fabsasym  );
 			}
@@ -322,7 +423,7 @@ protected:
 		hm->SetBinContent( 2, 41.4201 );
 		hm->SetBinContent( 3, 46.468 );
 		
-
+		LOG_F( INFO, "Complete");
 	}
 
 

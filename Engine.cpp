@@ -10,6 +10,7 @@ using namespace jdb;
 #include <exception>
 
 #include "Analyzer.h"
+#include "TofTagProbe.h"
 #include "Fitter.h"
 #include "ZDCFitter.h"
 #include "ZDCFitterUU.h"
@@ -29,6 +30,7 @@ int main( int argc, char* argv[] ) {
 
 	TaskFactory::registerTaskRunner<MagPlotter>( "MagPlotter" );	
 	TaskFactory::registerTaskRunner<Analyzer>( "Analyzer" );
+	TaskFactory::registerTaskRunner<TofTagProbe>( "TofTagProbe" );
 	TaskFactory::registerTaskRunner<Fitter>( "Fitter" );	
 	TaskFactory::registerTaskRunner<ZDCFitter>( "ZDCFitter" );	
 	TaskFactory::registerTaskRunner<ZDCFitterUU>( "ZDCFitterUU" );
