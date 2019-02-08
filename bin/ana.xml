@@ -5,8 +5,11 @@
 	<ver></ver>
 
 	<p>
-		<dTofCut>0.5</dTofCut>
-		<XeeCut>3</XeeCut>
+		<dTofCut>0.50</dTofCut>
+		<XeeXpipi>4</XeeXpipi>
+
+		<XeeCut>10</XeeCut>
+		<XpipiCut>0</XpipiCut>
 
 		<!-- <ZDCMode>1n1n</ZDCMode> -->
 
@@ -62,6 +65,10 @@
 			<Histo name="ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="rapid2" title=";M_{ee} (GeV/c^{2}); y^{ee}" bins_x="bins.mass" bins_y="bins.rap" />
 			<Histo name="pt2id2" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
+			
+			<Histo name="mvsephi" title="; #phi;M_{ee} (GeV/c^{2})" bins_x="bins.phi" bins_y="bins.mass" />
+			<Histo name="mvspphi" title="; #phi;M_{ee} (GeV/c^{2})" bins_x="bins.phi" bins_y="bins.mass" />
+			<Histo name="mvsdphi" title="; #phi;M_{ee} (GeV/c^{2})" bins_x="bins.phi" bins_y="bins.mass" />
 
 			<Histo name="mass1tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
 			<Histo name="mass2tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
@@ -71,23 +78,39 @@
 
 			<Histo name="ulsidtof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 
+			<Histo name="nSigE1_nSigE2" title=";n#sigma_{e1}; n#sigma_{e2}" bins_x="bins.nsig" bins_y="bins.nsig" />
+			<Histo name="nSigE1_nSigE2_sel" title=";n#sigma_{e1}; n#sigma_{e2}" bins_x="bins.nsig" bins_y="bins.nsig" />
+			<Histo name="nSigE1_nSigE2_cut" title=";n#sigma_{e1}; n#sigma_{e2}" bins_x="bins.nsig" bins_y="bins.nsig" />
+
 			<Histo name="mNHitsFit" title="mNHitsFit" bins_x="bins.nhit" />
 			<Histo name="mNHitsPoss" title="mNHitsFit" bins_x="bins.nhit" />
 			<Histo name="mNHitsDeDx" title="mNHitsFit" bins_x="bins.nhit" />
 			<Histo name="mDCA" title="DCA" bins_x="bins.dca" />
+			<Histo name="mDCA_mPt" title="; p_{T}; DCA (cm)" bins_x="bins.pt" bins_y="bins.dca" />
+
+			<Histo name="mNHits_mPhi_etap_pos" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
+			<Histo name="mNHits_mPhi_etap_neg" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
+
+			<Histo name="mNHits_mPhi_etan_pos" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
+			<Histo name="mNHits_mPhi_etan_neg" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
 
 
 
 			<!-- with TPC efficiency correction -->
 			<Histo name="wulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="wvpulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="wrapid2" title=";M_{ee} (GeV/c^{2}); y^{ee}" bins_x="bins.mass" bins_y="bins.rap" />
 			<Histo name="wpt2id2" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
+
+			<Histo name="w1ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="wvp1ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 
 			<!-- 3D efficiency weighting -->
 			<Histo name="w3ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="w3rapid2" title=";M_{ee} (GeV/c^{2}); y^{ee}" bins_x="bins.mass" bins_y="bins.rap" />
 			<Histo name="w3pt2id2" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
 			<Histo name="w3costhetaid2" title=";M_{ee} (GeV/c^{2}); costheta" bins_x="bins.mass" bins_y="bins.costheta" />
+			<Histo name="w2costhetaid2" title=";M_{ee} (GeV/c^{2}); costheta" bins_x="bins.mass" bins_y="bins.costheta" />
 
 			<Histo name="meanPt2" title=";M_{ee} (GeV/c^{2}); #sqrt{p_{T}^{2} } (MeV/c)" bins_x="bins.massSlice" />
 			<Histo name="meanPt2Model" title=";M_{ee} (GeV/c^{2}); #sqrt{p_{T}^{2} } (MeV/c)" bins_x="bins.massSlice" />
@@ -105,6 +128,20 @@
 			<Histo name="ddeltaTof" title="dtof" bins_x="bins.deltaLen" />
 			<Histo name="deltaPhi_pd1" title="" bins_x="bins.deltaPhi" />
 			<Histo name="deltaPhi_pd2" title="" bins_x="bins.deltaPhi" />
+			<Histo name="deltaPhi_pd1_fold" title="" bins_x="bins.deltaPhiFold" />
+			<Histo name="deltaPhi_pd1_fold_mass" title="" bins_x="bins.mass" bins_y="bins.deltaPhiFold" />
+
+			<Histo name="wdeltaPhi_pd1" title="" bins_x="bins.deltaPhi" />
+			<Histo name="wdeltaPhi_pd2" title="" bins_x="bins.deltaPhi" />
+			<Histo name="wdeltaPhi_pd1_fold" title="" bins_x="bins.deltaPhiFold" />
+			<Histo name="wdeltaPhi_pd1_2fold" title="" bins_x="bins.deltaPhi2Fold" />
+
+			<Histo name="wdeltaPhi_pd1_fold_mass" title="" bins_x="bins.mass" bins_y="bins.deltaPhiFold" />
+			<Histo name="wdeltaPhi_pd1_fold_pt" title="" bins_x="bins.pt" bins_y="bins.deltaPhiFold" />
+
+			<!-- Full mass range -->
+			<Histo name="wdeltaPhi_pd1_fold_all" title="" bins_x="bins.deltaPhiFold" />
+			<Histo name="wdeltaPhi_pd1_2fold_all" title="" bins_x="bins.deltaPhi2Fold" />
 
 			<Histo name="deltaAngle_pd1" title="" bins_x="bins.deltaPhi" />
 			<Histo name="deltaAngle_pd2" title="" bins_x="bins.deltaPhi" />
@@ -141,12 +178,18 @@
 		<pp min="0.0" max="2.0" width="0.01" />
 		<dedx min="-15.0" max="15.0" width="0.005" />
 		<chi min="0" max="200.0" width="0.1" />
+		<nsig min="-10" max="10" width="0.1" />
+		<phi min="-3.2" max="3.2" width="0.05" />
+		<mPhi min="-3.14" max="3.14" width="0.314" />
+		<nHits min="0" max="50" width="1" />
 		<costheta min="0" max="1.0" width="0.01" />
 
 		<deltaTof min="-15" max="15" width="0.01" />
 		<deltaTofe min="-50" max="50" width="0.01" />
 		<deltaLen min="-50" max="50" width="0.01" />
-		<deltaPhi min="-4" max="4" width="0.05" />
+		<deltaPhi min="-3.141" max="3.141" nBins="50" />
+		<deltaPhiFold min="0" max="1.57" nBins="15" />
+		<deltaPhi2Fold min="0" max="0.785" nBins="15" />
 
 		<nhit min="0" max="50" width="1" />
 		<dca min="0" max="5" width="0.05" />
