@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<Task name="Analyzer" type="Analyzer" config="" nodePath="Analyzer"  />
-	<mod>Run12UU</mod>
+	<mod>Run10AuAu</mod>
 	<ver></ver>
 
 	<p>
-		<dTofCut>0.50</dTofCut>
-		<XeeXpipi>4</XeeXpipi>
+		<dTofCut>0.40</dTofCut>
+		<XeeXpipi>3</XeeXpipi>
 
 		<XeeCut>10</XeeCut>
 		<XpipiCut>0</XpipiCut>
@@ -27,6 +27,8 @@
 		<!-- ALL -->
 		<ZDCEast min="0" max="8500" />
 		<ZDCWest min="0" max="8000"/>
+
+		<min_pT>0.200</min_pT>
 		
 	</p>
 	
@@ -70,8 +72,11 @@
 			<Histo name="mvspphi" title="; #phi;M_{ee} (GeV/c^{2})" bins_x="bins.phi" bins_y="bins.mass" />
 			<Histo name="mvsdphi" title="; #phi;M_{ee} (GeV/c^{2})" bins_x="bins.phi" bins_y="bins.mass" />
 
+			<Histo name="mass0tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
 			<Histo name="mass1tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
 			<Histo name="mass2tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+			<Histo name="pimass1tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+			<Histo name="pimass2tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
 
 			<Histo name="pt1tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.pt" />
 			<Histo name="pt2tof" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.pt" />
@@ -94,15 +99,29 @@
 			<Histo name="mNHits_mPhi_etan_pos" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
 			<Histo name="mNHits_mPhi_etan_neg" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
 
+			<Histo name="mNHitsFit_mPt_pos" title="mNHitsFit" bins_x="bins.mPt" bins_y="bins.nhit" />
+			<Histo name="mNHitsFit_mPt_neg" title="mNHitsFit" bins_x="bins.mPt" bins_y="bins.nhit" />
+
+			<Histo name="noCorr" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+			<Histo name="nhfCorr" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+			<Histo name="nhdCorr" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+			<Histo name="nhCorr" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" />
+
 
 
 			<!-- with TPC efficiency correction -->
+			<Histo name="wulsid" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="wulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="wTPCulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="wTOFulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="wOLDulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="wvpulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="wrapid2" title=";M_{ee} (GeV/c^{2}); y^{ee}" bins_x="bins.mass" bins_y="bins.rap" />
 			<Histo name="wpt2id2" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
+			<Histo name="wculsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 
 			<Histo name="w1ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="w1OLDulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="wvp1ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 
 			<!-- 3D efficiency weighting -->

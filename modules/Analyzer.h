@@ -38,6 +38,7 @@ protected:
 
 	float XeeCut = 0.2;
 	float XpipiCut = 0.0;
+	float XpipiMaxCut = 120.0;
 	float ScaleFactor = 1.0;
 
 	float ZDCMin = 0;
@@ -63,11 +64,19 @@ protected:
 	TH1 * hVPMassEff = nullptr;
 	TH1 * hSLMassEff = nullptr;
 
+	TH1 * hUpcEmb_TpcEffVsMass = nullptr;
+	TH1 * hUpcEmb_TofEffVsMass = nullptr;
+
+	TH1 * hUpcEmb_NHFCorr = nullptr;
+	TH1 * hUpcEmb_NHDCorr = nullptr;
+
 
 	// Tracking cuts
 	int min_nHitsFit  = 20;
 	int min_nHitsDedx = 10;
 	float max_Dca = 1.0;
+	float min_nhr = 0.52;
+	float min_pT  = 0.200;
 
 	
 
@@ -118,12 +127,16 @@ public:
 		gRandom->SetSeed( 0 );
 
 		min_nHitsFit  = config.get<int>( "p.min_nHitsFit", 20 );
-		min_nHitsDedx = config.get<int>( "p.min_nHitsDedx", 10 );
+		min_nHitsDedx = config.get<int>( "p.min_nHitsDedx", 15 );
 		max_Dca       = config.get<float>( "p.max_Dca", 1.0 );
+		min_nhr       = config.get<float>( "p.min_nhr", 0.52 );
+		min_pT        = config.get<float>( "p.min_pT", 0.52 );
 		
 		LOG_F( INFO, "min_nHitsFit = %d" , min_nHitsFit  );
 		LOG_F( INFO, "min_nHitsDedx = %d" , min_nHitsDedx  );
 		LOG_F( INFO, "max_Dca = %f", max_Dca );
+		LOG_F( INFO, "min_nhr = %f", min_nhr );
+		LOG_F( INFO, "min_pT = %f", min_pT );
 		
 
 		TFile *f = new TFile( "/Users/jdb/bnl/work/upc/data/Cen60_80_VP_pairEff.root" );
@@ -170,7 +183,25 @@ public:
 
 		hCosThetaEff = (TH2*)hCosThetaEffRc->Clone( "hTpcEffCosTheta" );
 		hCosThetaEff->Divide( hCosThetaEffMc );
+
+		TFile * fUpcEmbTpc = new TFile( "/Users/jdb/bnl/work/upc/embedding/output_eff_mass.root" );
+		hUpcEmb_TpcEffVsMass = (TH1F*)fUpcEmbTpc->Get( "eff_mMass" )->Clone( "hUpcEmb_TpcEffVsMass" );
+		TFile * fUpcEmbTof = new TFile( "/Users/jdb/bnl/work/upc/embedding/shuai/AuAu200_pairEff/output/eff.root" );
+		hUpcEmb_TofEffVsMass = (TH1F*)fUpcEmbTof->Get( "eff_mass" )->Clone( "hUpcEmb_TofEffVsMass" );
+
+		LOG_F( INFO, "hUpcEmb_TpcEffVsMass=%p", hUpcEmb_TpcEffVsMass );
+		LOG_F( INFO, "hUpcEmb_TofEffVsMass=%p", hUpcEmb_TofEffVsMass );
+
+
+		TFile * fUpcEmbNHFCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsfit/output_corr.root" );
+		hUpcEmb_NHFCorr = (TH1F*)fUpcEmbNHFCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHFCorr" );
+
+		TFile * fUpcEmbNHDCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsdedx/output_corr.root" );
+		hUpcEmb_NHDCorr = (TH1F*)fUpcEmbNHDCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHDCorr" );
 		
+		LOG_F( INFO, "hUpcEmb_NHFCorr=%p", hUpcEmb_NHFCorr );
+		LOG_F( INFO, "hUpcEmb_NHDCorr=%p", hUpcEmb_NHDCorr );
+
 		book->cd();
 
 		hVPMassEff->Write();
@@ -187,6 +218,53 @@ public:
 	}
 protected:
 
+
+	float upcEmbNHFCorr( float pt ){
+
+		if ( pt >= 0.3 ) return 1.0;
+		TAxis * ax = hUpcEmb_NHFCorr->GetXaxis();
+
+		int im = ax->FindBin( pt );
+		float v = 1 - hUpcEmb_NHFCorr->GetBinContent( im );
+		if ( 0 == v || 1.0/v != 1.0/v )
+			return 0;
+		return 1.0 / ( v );
+	}
+
+	float upcEmbNHDCorr( float pt ){
+		
+		if ( pt >= 0.3 ) return 1.0;
+
+		TAxis * ax = hUpcEmb_NHDCorr->GetXaxis();
+
+		int im = ax->FindBin( pt );
+		float v = 1 - hUpcEmb_NHDCorr->GetBinContent( im );
+		if ( 0 == v || 1.0/v != 1.0/v )
+			return 0;
+		return 1.0 / ( v );
+	}
+
+	float upcEmbTpcEffW( float m ){
+
+		TAxis * ax = hUpcEmb_TpcEffVsMass->GetXaxis();
+
+		int im = ax->FindBin( m );
+		float v = hUpcEmb_TpcEffVsMass->GetBinContent( im );
+		if ( 0 == v || 1.0/v != 1.0/v )
+			return 0;
+		return 1.0 / ( v );
+	}
+
+	float upcEmbTofEffW( float m ){
+
+		TAxis * ax = hUpcEmb_TofEffVsMass->GetXaxis();
+
+		int im = ax->FindBin( m );
+		float v = hUpcEmb_TofEffVsMass->GetBinContent( im );
+		if ( 0 == v || 1.0/v != 1.0/v )
+			return 0;
+		return 1.0 / ( v );
+	}
 
 	float tpcEfficiencyWeight( float p, float m ){
 
@@ -318,10 +396,11 @@ protected:
 		book->fill( "events", 2 );
 
 		// if ( pair->d1_mMatchFlag == 0 || pair->d2_mMatchFlag == 0 ) return;
-		if ( pair->d1_mPt  < 0.200 || pair->d2_mPt < 0.200 || abs( pair->d1_mEta ) > 1.0 || abs( pair->d2_mEta ) > 1.0 ) return;
-		// if ( abs( pair->d1_mEta ) > 1.0 || abs( pair->d2_mEta ) > 1.0 ) return;
+		if ( pair->d1_mPt  < min_pT || pair->d2_mPt < min_pT ) return;
+		if ( abs( pair->d1_mEta ) > 1.0 || abs( pair->d2_mEta ) > 1.0 ) return;
 		
 		if ( pair->d1_mNHitsFit < min_nHitsFit || pair->d2_mNHitsFit < min_nHitsFit ) return;
+		if ( fabs(pair->d1_mNHitsFit) / (float)pair->d1_mNHitsMax < 0.52 || fabs(pair->d2_mNHitsFit) / (float)pair->d2_mNHitsMax < 0.52 ) return;
 		if ( pair->d1_mNHitsDedx < min_nHitsDedx || pair->d2_mNHitsDedx < min_nHitsDedx ) return;
 		
 		if ( pair->d1_mDCA > max_Dca ) return; 
@@ -366,14 +445,16 @@ protected:
 			
 			book->fill( "chipid", xpipi, xee );
 
-			if ( xee < XeeCut && XeeXpipi * xee < xpipi ){
+			if ( xee < XeeCut && XeeXpipi * xee < xpipi && xpipi < XpipiMaxCut ){
 				book->fill( "ulsid", lv.M(), lv.Pt(), ScaleFactor );
+				book->fill( "wulsid", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
 				book->fill( "chipidSel", xpipi, xee );
 
 				if ( pair->d1_mTof > 0 && pair->d2_mTof > 0 ){
 					book->fill( "ulsidtof", lv.M(), lv.Pt() );
 				}
 
+				book->fill( "mass0tof", lv.M() );
 				if ( pair->d1_mMatchFlag > 0 || pair->d2_mMatchFlag > 0 )
 					book->fill( "mass1tof", lv.M() );
 				if ( pair->d1_mMatchFlag > 0 && pair->d2_mMatchFlag > 0 )
@@ -387,6 +468,13 @@ protected:
 						book->fill( "pt2tof", pair->d2_mPt );
 					}
 				}
+			}
+
+			if ( xpipi < 2 ){
+				if ( pair->d1_mMatchFlag > 0 || pair->d2_mMatchFlag > 0 )
+					book->fill( "pimass1tof", lv.M() );
+				if ( pair->d1_mMatchFlag > 0 && pair->d2_mMatchFlag > 0 )
+					book->fill( "pimass2tof", lv.M() );
 			}
 
 
@@ -426,7 +514,7 @@ protected:
 			book->fill( "nSigE1_nSigE2", pair->d1_mNSigmaElectron, pair->d2_mNSigmaElectron );
 
 
-			if ( xee < XeeCut && abs(dTof - dTofe) < dTofCut && XeeXpipi * xee < xpipi ){
+			if ( xee < XeeCut && abs(dTof - dTofe) < dTofCut && XeeXpipi * xee < xpipi && xpipi < XpipiMaxCut ){
 				book->fill( "nSigE1_nSigE2_sel", pair->d1_mNSigmaElectron, pair->d2_mNSigmaElectron );
 				book->fill( "ZDCEastWestAnalyzed", pair->mZDCEast, pair->mZDCWest );
 				book->fill( "ulsid2", lv.M(), lv.Pt(), ScaleFactor );
@@ -437,13 +525,27 @@ protected:
 				book->fill( "mvspphi", lv2.Phi(), lv.M() );
 				book->fill( "mvsdphi", lv1.DeltaPhi( lv2 ), lv.M() );
 
-				book->fill( "wulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.Pt(), lv.M() ) );
-				book->fill( "w1ulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.M() ) );
+				float upcembeffw1d = upcEmbTpcEffW( lv.M() ) * upcEmbTofEffW( lv.M() );
+				book->fill( "wulsid2", lv.M(), lv.Pt(), upcembeffw1d );
+				book->fill( "wTPCulsid2", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
+				book->fill( "wTOFulsid2", lv.M(), lv.Pt(), upcEmbTofEffW( lv.M() ) );
+				book->fill( "wOLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.Pt(), lv.M() ) );
+				book->fill( "w1ulsid2", lv.M(), lv.Pt(), upcembeffw1d );
+				book->fill( "w1OLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.M() ) );
 
 				book->fill( "wvpulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 				book->fill( "wvp1ulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.M() ) );
 				book->fill( "wrapid2", lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 				book->fill( "wpt2id2", lv.M(), lv.Pt() * lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+
+				book->fill( "noCorr",  lv.M() );
+				float corrNHF = upcEmbNHFCorr( pair->d1_mPt ) * upcEmbNHFCorr( pair->d2_mPt );
+				float corrNHD = upcEmbNHDCorr( pair->d1_mPt ) * upcEmbNHDCorr( pair->d2_mPt );
+				book->fill( "nhfCorr", lv.M(), corrNHF );
+				book->fill( "nhdCorr", lv.M(), corrNHD );
+				book->fill( "nhCorr",  lv.M(), corrNHF * corrNHD );
+
+				book->fill( "wculsid2", lv.M(), lv.Pt(), upcembeffw1d * corrNHF * corrNHD );
 
 				if ( pair->d1_mEta > 0 )
 					book->fill( "mNHits_mPhi_etap_pos", pair->d1_mPhi, pair->d1_mNHitsFit );
@@ -453,6 +555,10 @@ protected:
 					book->fill( "mNHits_mPhi_etap_neg", pair->d2_mPhi, pair->d2_mNHitsFit );
 				else 
 					book->fill( "mNHits_mPhi_etan_neg", pair->d2_mPhi, pair->d2_mNHitsFit );
+
+				book->fill( "mNHitsFit_mPt_pos", pair->d1_mPt, pair->d1_mNHitsFit );
+				book->fill( "mNHitsFit_mPt_neg", pair->d2_mPt, pair->d2_mNHitsFit );
+
 
 				// LOG_F( INFO, "3D eff factor (%f, %f, %f) = %f", lv.Pt(), lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() ) );
 				float e3d = tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() );
