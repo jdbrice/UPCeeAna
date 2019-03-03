@@ -1,7 +1,7 @@
 
 
 
-void cosphi( string n = "Run10AuAu.root" ){
+void cosphi( string n = "Run10AuAu_Tpc_Signal.root" ){
 
 	TFile *f = new TFile( n.c_str() );
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+
+	<Data name="d" url="Run10AuAu.root" />
+
+	<TCanvas w="1200" h="900" />
+
+	<pid>
+		<X2ee min="30" max="100" />
+	</pid>
+
+	<Transform>
+		<Projection axis="x" save_as="m_chipid" name="mass_chipid" y1="{pid.X2ee:min}" y2="{pid.X2ee:max}" />
+		<Projection axis="x" save_as="m_chipidSel" name="mass_chipidSel" y1="{pid.X2ee:min}" y2="{pid.X2ee:max}" />
+		<Projection axis="x" save_as="m_chipidcut" name="mass_chipidcut" y1="{pid.X2ee:min}" y2="{pid.X2ee:max}" />
+		<Projection axis="x" save_as="m_chipidmatch" name="mass_chipidmatch" y1="{pid.X2ee:min}" y2="{pid.X2ee:max}" />
+		<Projection axis="x" save_as="m_chipidcutSel" name="mass_chipidcutSel" y1="{pid.X2ee:min}" y2="{pid.X2ee:max}" />
+
+		<Rebin save_as="mass_vs_X2ee" name="mass_chipidcut" bins_x="bins.mass2D" bins_y="bins.X2ee" />
+		<Rebin save_as="mass_vs_X2ee_Signal" name="mass_chipidcutSel" bins_x="bins.mass2D" bins_y="bins.X2ee" />
+
+		<Rebin save_as="mrb_chipid" name="m_chipid" bins_x="bins.mass" />
+		<Rebin save_as="mrb_chipidSel" name="m_chipidSel" bins_x="bins.mass" />
+		<Rebin save_as="mrb_chipidcut" name="m_chipidcut" bins_x="bins.mass" />
+		<Rebin save_as="mrb_chipidmatch" name="m_chipidmatch" bins_x="bins.mass" />
+		<Rebin save_as="mrb_chipidcutSel" name="m_chipidcutSel" bins_x="bins.mass" />
+
+		<Sumw2 name="mrb_chipid" />
+		<Sumw2 name="mrb_chipidSel" />
+		<Sumw2 name="mrb_chipidcut" />
+		<Sumw2 name="mrb_chipidmatch" />
+		<Sumw2 name="mrb_chipidcutSel" />
+
+		<Divide save_as="cut_over_match" nameA="mrb_chipidcut" nameB="mrb_chipidmatch" opt="B" />
+		<Divide save_as="cut_over_notof" nameA="mrb_chipidcut" nameB="mrb_chipid" opt="B" />
+		<Divide save_as="match_over_notof" nameA="mrb_chipidmatch" nameB="mrb_chipid" opt="B" />
+
+	</Transform>
+
+	<bins>
+		
+		<mass> 0.00, 0.05, 0.10, 0.15, 0.20, 0.30, 0.35, 0.40, 0.45, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.20, 1.50, 2.00, 2.50</mass>
+
+		<mass2D min="0" max="2.5" width="0.01" />
+		<X2ee min="0" max="120" width="1" />
+	</bins>
+
+
+	<Plot>
+		<StatBox v="0" />
+		<Histo name="mass_vs_X2ee" draw="colz" logz="1"  x-title="M_{ee} (GeV/c^{2})" y-title="#chi^{2}_{ee}" />
+		<Export url="mass_vs_X2ee.png" />
+	</Plot>
+
+	<Plot>
+		<StatBox v="0" />
+		<Histo name="mass_vs_X2ee_Signal" draw="colz" logz="1"  x-title="M_{ee} (GeV/c^{2})" y-title="#chi^{2}_{ee}" />
+		<Export url="mass_vs_X2ee_Signal.png" />
+	</Plot>
+
+	<Plot>
+		<Histo name="mrb_chipid" draw="pe" lc="#000" logy="1" />
+		<Histo name="mrb_chipid" draw="same hist" lc="#000" />
+		
+		<Histo name="mrb_chipidmatch" draw="same pe" lc="#F00" />
+		<Histo name="mrb_chipidmatch" draw="same hist" lc="#F00" />
+
+		<Histo name="mrb_chipidcut" draw="same pe" lc="#00F" />
+		<Histo name="mrb_chipidcut" draw="same hist" lc="#00F" />
+
+
+		<Export url="rp_pid_evo.pdf" />
+	</Plot>
+
+
+
+	<Plot>
+		<StatBox v="0" />
+		<Axes lsx="0, 2.5, 250" lsy="0, 1, 100" logy="0" x-title="M_{ee} (GeV/c^{2})"/>
+
+		<Histo name="cut_over_notof" draw="same pe" logy="0" lc="#00F" />
+		<Histo name="match_over_notof" draw="same pe" logy="0" lc="#F00" />
+		<Histo name="cut_over_match" draw="same pe" logy="0" lc="#000" />
+
+		<Legend border-size="0" >
+			<Position pos="bottom right" padding="0, 0.05, 0.05, 0" />
+			<Entry name="cut_over_notof" title="(#chi^{2}_{ee} < {pid.X2ee:max} && |#Delta#DeltaTOF|<0.4) / (#chi^{2}_{ee} < {pid.X2ee:max})" opt="lpe" />
+		</Legend>
+
+		<Export url="rp_pid_evo_eff.pdf" />
+	</Plot>
+
+
+</config>
