@@ -93,61 +93,9 @@ public:
 	Analyzer() {}
 	~Analyzer() {}
 
-	virtual void initialize(){
-		TreeAnalyzer::initialize();
 
-		this->_fpr.setup( this->chain, "Pairs" );
-
-		dTofCut = config.get<float>( "p.dTofCut", 0.2 );
-		XeeXpipi = config.get<float>( "p.XeeXpipi", 5 );
-
-		XeeCut = config.get<float>( "p.XeeCut", 5 );
-		XpipiCut = config.get<float>( "p.XpipiCut", 0 );
-
-		ZDCEastMin = config.get<float>( "p.ZDCEast:min", 50 );
-		ZDCEastMax = config.get<float>( "p.ZDCEast:max", 1200 );
-
-		ZDCWestMin = config.get<float>( "p.ZDCWest:min", 50 );
-		ZDCWestMax = config.get<float>( "p.ZDCWest:max", 1200 );
-
-		// string ZDCMode = config.get<string>( "p.ZDCMode", "all" );
-		// ZDCMin = 50;
-		// ZDCMax = 1200;
-		// if ( "1n1n" == ZDCMode ){
-		// 	ZDCMax = 300;
-		// } else if ( "XnXn" == ZDCMode ){
-		// 	ZDCMin = 300;
-		// }
-
-		LOG_F( INFO, "dTofCut = %f", dTofCut );
-		
-		LOG_F( INFO, "XeeXpipi = %f", XeeXpipi );
-		LOG_F( INFO, "XeeCut = %f", XeeCut );
-		// LOG_F( INFO, "XpipiCut = %f", XpipiCut );
-
-		// LOG_F( INFO, "ZDC Cuts = ( %f, %f )", ZDCMin, ZDCMax );
-		LOG_F( INFO, "ZDCEast Cuts = ( %f, %f )", ZDCEastMin, ZDCEastMax );
-		LOG_F( INFO, "ZDCWest Cuts = ( %f, %f )", ZDCWestMin, ZDCWestMax );
-		LOG_F( INFO, "1.0/ScaleFactor( %s ) = %f", config.get<string>("mod").c_str(), 1.0 / ScaleFactor );
-
-		gRandom = new TRandom3();
-		gRandom->SetSeed( 0 );
-
-		min_nHitsFit  = config.get<int>( "p.min_nHitsFit", 20 );
-		min_nHitsDedx = config.get<int>( "p.min_nHitsDedx", 15 );
-		max_Dca       = config.get<float>( "p.max_Dca", 1.0 );
-		min_nhr       = config.get<float>( "p.min_nhr", 0.52 );
-		min_pT        = config.get<float>( "p.min_pT", 0.52 );
-		max_vZ        = config.get<float>( "p.max_vZ", 100 );
-		
-		LOG_F( INFO, "min_nHitsFit = %d" , min_nHitsFit  );
-		LOG_F( INFO, "min_nHitsDedx = %d" , min_nHitsDedx  );
-		LOG_F( INFO, "max_Dca = %f", max_Dca );
-		LOG_F( INFO, "min_nhr = %f", min_nhr );
-		LOG_F( INFO, "min_pT = %f", min_pT );
-		LOG_F( INFO, "max_vZ = %f", max_vZ );
-		
-
+	void setup_shuai_eff(){
+		LOG_SCOPE_FUNCTION(INFO);
 		TFile *f = new TFile( "/Users/jdb/bnl/work/upc/data/Cen60_80_VP_pairEff.root" );
 		hEffMc = (TH2*)f->Get("hMCAcc1virtualphotoneehist");
 		hEffRc = (TH2*)f->Get("hRCvirtualphotoneehistRun10");
@@ -192,6 +140,10 @@ public:
 
 		hCosThetaEff = (TH2*)hCosThetaEffRc->Clone( "hTpcEffCosTheta" );
 		hCosThetaEff->Divide( hCosThetaEffMc );
+	}
+
+	void setup_emb_eff(){
+		LOG_SCOPE_FUNCTION(INFO);
 
 		string filename_TPC_EFF = config.get<string>( "p.TpcEff", "/Users/jdb/bnl/work/upc/embedding/output_eff_mass_NOMINAL.root" );
 		LOG_F( INFO, "TpcEff = %s", filename_TPC_EFF.c_str() );
@@ -216,20 +168,61 @@ public:
 		
 		LOG_F( INFO, "hUpcEmb_NHFCorr=%p", hUpcEmb_NHFCorr );
 		LOG_F( INFO, "hUpcEmb_NHDCorr=%p", hUpcEmb_NHDCorr );
+	}
 
+	virtual void initialize(){
+		LOG_SCOPE_FUNCTION(INFO);
+		TreeAnalyzer::initialize();
+
+		LOG_F( INFO, "Initialize" );
+		this->_fpr.setup( this->chain, "Pairs" );
+
+		{
+			LOG_SCOPE_F(INFO, "PID Cuts");
+
+			dTofCut = config.get<float>( "p.dTofCut", 0.2 );
+			XeeXpipi = config.get<float>( "p.XeeXpipi", 5 );
+			XeeCut = config.get<float>( "p.XeeCut", 5 );
+			XpipiCut = config.get<float>( "p.XpipiCut", 0 );
+
+			LOG_F( INFO, "dTofCut = %f", dTofCut );
+			LOG_F( INFO, "XeeXpipi = %f", XeeXpipi );
+			LOG_F( INFO, "XeeCut = %f", XeeCut );
+			LOG_F( INFO, "XpipiCut = %f", XpipiCut );
+		}
+
+
+		gRandom = new TRandom3();
+		gRandom->SetSeed( 0 );
+
+		min_nHitsFit  = config.get<int>( "p.min_nHitsFit", 20 );
+		min_nHitsDedx = config.get<int>( "p.min_nHitsDedx", 15 );
+		max_Dca       = config.get<float>( "p.max_Dca", 1.0 );
+		min_nhr       = config.get<float>( "p.min_nhr", 0.52 );
+		min_pT        = config.get<float>( "p.min_pT", 0.52 );
+		max_vZ        = config.get<float>( "p.max_vZ", 100 );
+		
+		{
+			LOG_SCOPE_F(INFO, "Analysis Cuts");
+			LOG_F( INFO, "min_nHitsFit = %d" , min_nHitsFit  );
+			LOG_F( INFO, "min_nHitsDedx = %d" , min_nHitsDedx  );
+			LOG_F( INFO, "max_Dca = %f", max_Dca );
+			LOG_F( INFO, "min_nhr = %f", min_nhr );
+			LOG_F( INFO, "min_pT = %f", min_pT );
+			LOG_F( INFO, "max_vZ = %f", max_vZ );
+		}
+		
+
+		
+		setup_shuai_eff();
+		setup_emb_eff();
 		book->cd();
-
-		hVPMassEff->Write();
-		hSLMassEff->Write();
 
 		hSampleMassEff = (TH1*)hSLMassEff->Clone( "hSampleMassEff" );
 		hSampleMassEff->Reset();
 		hSampleMassEffw = (TH1*)hSLMassEff->Clone( "hSampleMassEffw" );
 		hSampleMassEffw->Reset();
 
-		hEffMc->Write();
-		hEffRc->Write();
-		hEff->Write();
 	}
 protected:
 
