@@ -471,12 +471,24 @@ protected:
 			dTofe = 399;
 		}
 
+
+		// Compute the cos(theta)
 		TLorentzVector lvPositron = lv2;
 		lvPositron.Boost( -(lv.BoostVector()) );
 		TVector3 vbeam(0, 0, 1.0);
 
 		TVector3 vPositron( lvPositron.Px(), lvPositron.Py(), lvPositron.Pz() );
 		float costheta = cos( vPositron.Angle( vbeam ) );
+
+
+		// compute the deltaPhi between parent and daughter
+		TVector3 vParent( lv.Px(), lv.Py(), lv.Pz() );
+		TVector3 vD1( lv1.Px(), lv1.Py(), lv1.Pz() );
+		TVector3 vD2( lv2.Px(), lv2.Py(), lv2.Pz() );
+
+		float dPhi_pd1       = lv1.DeltaPhi( lv );
+		float dPhi_pd1_fold  = foldPi( dPhi_pd1 );
+		float dPhi_pd1_fold2 = foldPi2( dPhi_pd1 );
 
 		////////////////////////////////////////////////////////////////////////
 		/// Opposite-Sign
@@ -493,6 +505,7 @@ protected:
 			book->fill( "y_chipid", lv.Rapidity(), xee );
 			book->fill( "pt_chipid", lv.Pt(), xee );
 			book->fill( "ct_chipid", costheta, xee );
+			if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipid", dPhi_pd1_fold, xee );
 
 			if ( xee < XeeCut && XeeXpipi * xee < xpipi && xpipi < XpipiMaxCut ){
 				book->fill( "ulsid", lv.M(), lv.Pt(), ScaleFactor );
@@ -506,6 +519,7 @@ protected:
 				book->fill( "y_chipidSel", lv.Rapidity(), xee );
 				book->fill( "pt_chipidSel", lv.Pt(), xee );
 				book->fill( "ct_chipidSel", costheta, xee );
+				if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidSel", dPhi_pd1_fold, xee );
 
 				if ( pair->d1_mTof > 0 && pair->d2_mTof > 0 ){
 					book->fill( "ulsidtof", lv.M(), lv.Pt() );
@@ -576,6 +590,7 @@ protected:
 				book->fill( "y_chipidmatch", lv.Rapidity(), xee );
 				book->fill( "pt_chipidmatch", lv.Pt(), xee );
 				book->fill( "ct_chipidmatch", costheta, xee );
+				if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidmatch", dPhi_pd1_fold, xee );
 
 				if ( pair->d1_mTof >= 0 && pair->d2_mTof >= 0 ){
 					book->fill( "chipidtime", xpipi, xee );
@@ -583,6 +598,7 @@ protected:
 					book->fill( "y_chipidtime", lv.Rapidity(), xee );
 					book->fill( "pt_chipidtime", lv.Pt(), xee );
 					book->fill( "ct_chipidtime", costheta, xee );
+					if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidtime", dPhi_pd1_fold, xee );
 				}
 
 			}
@@ -600,6 +616,7 @@ protected:
 				book->fill( "y_chipidcut", lv.Rapidity(), xee );
 				book->fill( "pt_chipidcut", lv.Pt(), xee );
 				book->fill( "ct_chipidcut", costheta, xee );
+				if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidcut", dPhi_pd1_fold, xee );
 
 
 				book->fill( "dedxcut", lv1.P(), pair->d1_mNSigmaElectron );
@@ -693,6 +710,7 @@ protected:
 					book->fill( "y_chipidcutSel", lv.Rapidity(), xee );
 					book->fill( "pt_chipidcutSel", lv.Pt(), xee );
 					book->fill( "ct_chipidcutSel", costheta, xee );
+					if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidcutSel", dPhi_pd1_fold, xee );
 					book->fill( "xeedTofSel", xee, (dTof - dTofe) );
 
 					double aco = 1.0 - fabs( lv1.DeltaPhi( lv2 ) ) / TMath::Pi();
@@ -701,11 +719,6 @@ protected:
 					book->fill( "asym", lv.M(), asym );
 
 					if ( lv.M() > 0.4 && lv.M() < 0.76 ){
-						
-						TVector3 vParent( lv.Px(), lv.Py(), lv.Pz() );
-						TVector3 vD1( lv1.Px(), lv1.Py(), lv1.Pz() );
-						TVector3 vD2( lv2.Px(), lv2.Py(), lv2.Pz() );
-						
 						book->fill( "deltaPhi_pd1", lv1.DeltaPhi( lv ) );
 						book->fill( "deltaPhi_pd2", lv.DeltaPhi( lv2 ) );
 
@@ -752,6 +765,7 @@ protected:
 					book->fill( "y_chipidcutNoSel", lv.Rapidity(), xee );
 					book->fill( "pt_chipidcutNoSel", lv.Pt(), xee );
 					book->fill( "ct_chipidcutNoSel", costheta, xee );
+					if ( lv.M() > 0.4 && lv.M() < 3.0 ) book->fill( "dphi_chipidcutNoSel", dPhi_pd1_fold, xee );
 				}
 			} // end DeltaDeltaTof cuts
 

@@ -197,6 +197,14 @@
 			<Histo name="pt_chipidcutSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 			<Histo name="pt_chipidcutNoSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 
+			<Histo name="dphi_chipid" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidcut" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidtime" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidmatch" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidcutSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+			<Histo name="dphi_chipidcutNoSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
+
 			<Histo name="ct_chipid" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.costheta" bins_y="bins.chi" />
 			<Histo name="ct_chipidSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.costheta" bins_y="bins.chi" />
 			<Histo name="ct_chipidcut" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.costheta" bins_y="bins.chi" />
