@@ -93,24 +93,23 @@
 			<Histo name="mNHits_mPhi_etan_pos" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
 			<Histo name="mNHits_mPhi_etan_neg" title="pos;#phi;nHitsFit" bins_x="bins.mPhi" bins_y="bins.nHits" />
 
+			<!-- Track Quality histograms -->
 			<Histo name="mNHitsFit_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="mNHitsFit_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
-
 			<Histo name="mNHitsDedx_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="mNHitsDedx_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
-
 			<Histo name="mNHitsFit_Dedx_pos" title=";mNHitsDeDx;mNHitsFit" bins_x="bins.nhit" bins_y="bins.nhit" />
 			<Histo name="mNHitsFit_Dedx_neg" title=";mNHitsDeDx;mNHitsFit" bins_x="bins.nhit" bins_y="bins.nhit" />
 
+			<!-- Track quality histograms for TPC e+e- pairs -->
 			<Histo name="notof_mNHitsFit_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="notof_mNHitsFit_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
-
 			<Histo name="notof_mNHitsDedx_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="notof_mNHitsDedx_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 
+			<!-- QA for failed track cuts -->
 			<Histo name="failed_notof_mNHitsFit_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="failed_notof_mNHitsFit_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
-
 			<Histo name="failed_notof_mNHitsDedx_mPt_pos" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			<Histo name="failed_notof_mNHitsDedx_mPt_neg" title="mNHitsFit" bins_x="bins.pt" bins_y="bins.nhit" />
 			
@@ -133,9 +132,16 @@
 			<Histo name="wpt2id2" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
 			<Histo name="wculsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 
-			<Histo name="signal_pt_mass" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
-			<Histo name="signal_pt2_mass" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt2" />
-			<Histo name="signal_y_mass" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.rap" />
+
+			<!-- Signal Histograms -->
+			<Histo name="signal_pt_mass" title=";M_{ee} (GeV/c^{2}); p_{T} (GeV/c)" bins_x="bins.mass" bins_y="bins.pt" />
+			<Histo name="signal_pt2_mass" title=";M_{ee} (GeV/c^{2}); p_{T}^{2} (GeV/c)^{2}" bins_x="bins.mass" bins_y="bins.pt2" />
+			<Histo name="signal_y_mass" title=";M_{ee} (GeV/c^{2}); y^{ee}" bins_x="bins.mass" bins_y="bins.rap" />
+			<Histo name="signal_costheta_mass" title=";M_{ee} (GeV/c^{2});cos(#theta)" bins_x="bins.mass" bins_y="bins.costheta" />
+			<Histo name="signal_dphi0_mass" title=";M_{ee} (GeV/c^{2}); #phi^{ee} - #phi^{e}" bins_x="bins.mass" bins_y="bins.deltaPhi" />
+			<Histo name="signal_dphi1_mass" title=";M_{ee} (GeV/c^{2}); #phi^{ee} - #phi^{e}" bins_x="bins.mass" bins_y="bins.deltaPhiFold" />
+			<Histo name="signal_dphi2_mass" title=";M_{ee} (GeV/c^{2}); #phi^{ee} - #phi^{e}" bins_x="bins.mass" bins_y="bins.deltaPhi2Fold" />
+
 
 			<Histo name="w1ulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
 			<Histo name="w1OLDulsid2" title=";M_{ee} (GeV/c^{2}); dN/dM (GeV/c^{2})^{-1}" bins_x="bins.mass" bins_y="bins.pt" />
@@ -189,6 +195,7 @@
 			<Histo name="y_chipidcutSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.rap" bins_y="bins.chi" />
 			<Histo name="y_chipidcutNoSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.rap" bins_y="bins.chi" />
 
+			<!-- The below are p_{T}^{ee} vs. X2ee for the above cases -->
 			<Histo name="pt_chipid" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 			<Histo name="pt_chipidSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 			<Histo name="pt_chipidcut" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
@@ -196,6 +203,14 @@
 			<Histo name="pt_chipidmatch" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 			<Histo name="pt_chipidcutSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
 			<Histo name="pt_chipidcutNoSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt" bins_y="bins.chi" />
+
+			<Histo name="pt2_chipid" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidcut" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidtime" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidmatch" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidcutSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
+			<Histo name="pt2_chipidcutNoSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.pt2" bins_y="bins.chi" />
 
 			<Histo name="dphi_chipid" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
 			<Histo name="dphi_chipidSel" title=";M_{ee} (GeV/c^{2});#chi^{2}_{ee}" bins_x="bins.deltaPhiFold" bins_y="bins.chi" />
@@ -247,9 +262,9 @@
 			<Histo name="ddeltaTofvssump" title="dtof" bins_x="bins.pp" bins_y="bins.deltaTof" /> -->
 			<!-- <Histo name="ddeltaTofevsp" title="dtof" bins_x="bins.pp" bins_y="bins.deltaTof" /> -->
 
-			<Histo name="xeedTof" title="xeedTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
-			<Histo name="xeedTofSel" title="xeedTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
-			<Histo name="xpipidTof" title="xpipidTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
+			<Histo name="x2eedTof" title="x2eedTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
+			<Histo name="x2eedTofSel" title="x2eedTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
+			<Histo name="x2pipidTof" title="x2pipidTof" bins_x="bins.chi" bins_y="bins.deltaTof" />
 		</histograms>
 	</Analyzer>
 
@@ -258,7 +273,7 @@
 		<events min="0" max="10" width="1"/>
 		<mass min="0" max="4" width="0.001" />
 		<pt min="0" max="2.0" width="0.001" />
-		<pt2 min="0" max="0.5" width="0.0001" />
+		<pt2 min="0" max="0.05" width="0.0001" />
 		<aco min="0" max="1.0" width="0.001" />
 		<asym min="0" max="1.0" width="0.001" />
 		<zdc min="0" max="1200" width="5" />
