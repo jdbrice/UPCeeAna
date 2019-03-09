@@ -695,15 +695,27 @@ void FemtoEvent::Streamer(TBuffer &R__b)
       R__b >> mPrimaryVertex_mX1;
       R__b >> mPrimaryVertex_mX2;
       R__b >> mPrimaryVertex_mX3;
-      R__b >> mWeight;
+      R__b >> mVpdVz;
       R__b >> mRunId;
       R__b >> mEventId;
-      R__b >> mTriggerWord;
-      R__b >> mTriggerWordMtd;
       R__b >> mGRefMult;
-      R__b >> mPsi2;
-      R__b >> mBin16;
+      R__b >> mRefMult;
+      R__b >> mNBTofMatched;
+      R__b >> mNBTofHits;
+      R__b >> mNTracks;
+      R__b >> mNVerts;
+      R__b >> mRanking;
+      R__b >> mNVpdEast;
+      R__b >> mNVpdWest;
       R__b >> mRunIndex;
+      R__b >> mZDCEast;
+      R__b >> mZDCWest;
+      R__b >> mBBCEast;
+      R__b >> mBBCWest;
+      R__b >> mBBCLEast;
+      R__b >> mBBCLWest;
+      R__b >> mTofMultTrg;
+      R__b.ReadStaticArray((unsigned short*)mLastDsmBit);
       R__b.CheckByteCount(R__s, R__c, FemtoEvent::IsA());
    } else {
       R__c = R__b.WriteVersion(FemtoEvent::IsA(), kTRUE);
@@ -711,15 +723,27 @@ void FemtoEvent::Streamer(TBuffer &R__b)
       R__b << mPrimaryVertex_mX1;
       R__b << mPrimaryVertex_mX2;
       R__b << mPrimaryVertex_mX3;
-      R__b << mWeight;
+      R__b << mVpdVz;
       R__b << mRunId;
       R__b << mEventId;
-      R__b << mTriggerWord;
-      R__b << mTriggerWordMtd;
       R__b << mGRefMult;
-      R__b << mPsi2;
-      R__b << mBin16;
+      R__b << mRefMult;
+      R__b << mNBTofMatched;
+      R__b << mNBTofHits;
+      R__b << mNTracks;
+      R__b << mNVerts;
+      R__b << mRanking;
+      R__b << mNVpdEast;
+      R__b << mNVpdWest;
       R__b << mRunIndex;
+      R__b << mZDCEast;
+      R__b << mZDCWest;
+      R__b << mBBCEast;
+      R__b << mBBCWest;
+      R__b << mBBCLEast;
+      R__b << mBBCLWest;
+      R__b << mTofMultTrg;
+      R__b.WriteArray(mLastDsmBit, 8);
       R__b.SetByteCount(R__c, kTRUE);
    }
 }
@@ -1068,7 +1092,7 @@ namespace {
     };
     static const char* includePaths[] = {
 "/Users/jdb/bnl/work/upc/FemtoPairAnalysis/modules/FemtoDstFormat/",
-"/Users/jdb/bnl/vendor/6.14.04/include",
+"/Users/jdb/bnl/vendor/6.16.00_mac10.14/include",
 "/Users/jdb/bnl/work/upc/FemtoPairAnalysis/",
 0
     };

@@ -15,8 +15,8 @@ SConscript( "modules/FemtoPairFormat/SConstruct" )
 env.Append(CPPPATH    = [ "modules/" ])
 env.Append(CXXFLAGS   = ['-std=c++11', '-DJDB_LOG_LEVEL=0'])
 JDB_LIB = os.environ.get("JDB_LIB", "" )
-env.Append(LIBPATH    = [ JDB_LIB + "/lib/" ] )
-env.Append(LIBS       = [ "TMVA", "libRooBarbCore.a", "libRooBarbConfig.a", "libRooBarbTasks.a", "libRooBarbRootAna.a", "libRooBarbUnitTest.a", "libRooBarbExtra.a" ] )
+env.Append(LIBS 			= [ "libXmlConfig.a", "libRooPlotLib.a", "libTaskEngine.a", "libRootAna.a" ] )
+env.Append(LIBPATH 		= [ "/usr/local/lib" ] )
 
 debug = ARGUMENTS.get('debug', 0)
 if int(debug):
@@ -27,7 +27,10 @@ ROOTCFLAGS      = subprocess.check_output( ['root-config',  '--cflags'] ).rstrip
 ROOTLIBS        = subprocess.check_output( ["root-config",  "--libs"] ).decode( 'utf-8')
 ROOT_SYS        = os.environ.get( "ROOTSYS", "" )
 
-env.Append(CPPPATH   = [ ROOT_SYS + "/include/", JDB_LIB + "/include", "modules/StarClassLibrary" ])
+env.Append(CPPPATH   = [ ROOT_SYS + "/include/", '/usr/local/include/XmlConfig',
+							'/usr/local/include/RooPlotLib',
+							'/usr/local/include/TaskEngine',
+							'/usr/local/include/RootAna' ])
 env.Append(CXXFLAGS  = ROOTCFLAGS )
 env.Append(LINKFLAGS = ROOTCFLAGS )
 
