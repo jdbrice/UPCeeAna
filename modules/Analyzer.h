@@ -94,6 +94,9 @@ protected:
 	TH1 * hRecoPt2 = nullptr;
 	TH1 * hRecoCosTheta = nullptr;
 	TH1 * hRecoDeltaPhi = nullptr; // folded2 version
+
+	TH3 * hRecoMassPtRapidity = nullptr;
+	TH3 * hRecoMassCosThetaRapidity = nullptr;
 	/***************/
 
 	/***************/
@@ -179,34 +182,41 @@ public:
 	void setup_emb_eff(){
 		LOG_SCOPE_FUNCTION(INFO);
 
-		string filename_TPC_EFF = config.get<string>( "p.TpcEff", "/Users/jdb/bnl/work/upc/embedding/output_eff_mass_NOMINAL.root" );
-		LOG_F( INFO, "TpcEff = %s", filename_TPC_EFF.c_str() );
+		// string filename_TPC_EFF = config.get<string>( "p.TpcEff", "/Users/jdb/bnl/work/upc/embedding/output_eff_mass_NOMINAL.root" );
+		// LOG_F( INFO, "TpcEff = %s", filename_TPC_EFF.c_str() );
 
-		TFile * fUpcEmbTpc = new TFile( filename_TPC_EFF.c_str() );
-		hUpcEmb_TpcEffVsMass = (TH1F*)fUpcEmbTpc->Get( "eff_mMass" )->Clone( "hUpcEmb_TpcEffVsMass" );
-		TFile * fUpcEmbTof = new TFile( "/Users/jdb/bnl/work/upc/embedding/shuai/AuAu200_pairEff/output/eff.root" );
-		hUpcEmb_TofEffVsMass = (TH1F*)fUpcEmbTof->Get( "eff_mass" )->Clone( "hUpcEmb_TofEffVsMass" );
+		// TFile * fUpcEmbTpc = new TFile( filename_TPC_EFF.c_str() );
+		// hUpcEmb_TpcEffVsMass = (TH1F*)fUpcEmbTpc->Get( "eff_mMass" )->Clone( "hUpcEmb_TpcEffVsMass" );
+		// TFile * fUpcEmbTof = new TFile( "/Users/jdb/bnl/work/upc/embedding/shuai/AuAu200_pairEff/output/eff.root" );
+		// hUpcEmb_TofEffVsMass = (TH1F*)fUpcEmbTof->Get( "eff_mass" )->Clone( "hUpcEmb_TofEffVsMass" );
 
-		LOG_F( INFO, "hUpcEmb_TpcEffVsMass=%p", hUpcEmb_TpcEffVsMass );
-		LOG_F( INFO, "hUpcEmb_TofEffVsMass=%p", hUpcEmb_TofEffVsMass );
+		// LOG_F( INFO, "hUpcEmb_TpcEffVsMass=%p", hUpcEmb_TpcEffVsMass );
+		// LOG_F( INFO, "hUpcEmb_TofEffVsMass=%p", hUpcEmb_TofEffVsMass );
 
 
-		TFile * fUpcEmbNHFCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsfit/output_corr.root" );
-		hUpcEmb_NHFCorr = (TH1F*)fUpcEmbNHFCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHFCorr" );
+		// TFile * fUpcEmbNHFCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsfit/output_corr.root" );
+		// hUpcEmb_NHFCorr = (TH1F*)fUpcEmbNHFCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHFCorr" );
 
-		TFile * fUpcEmbNHDCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsdedx/output_corr.root" );
-		hUpcEmb_NHDCorr = (TH1F*)fUpcEmbNHDCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHDCorr" );
+		// TFile * fUpcEmbNHDCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsdedx/output_corr.root" );
+		// hUpcEmb_NHDCorr = (TH1F*)fUpcEmbNHDCorr->Get( "hCorr" )->Clone( "hUpcEmb_NHDCorr" );
 
-		TFile * fUpcEmbTpcNHDCorr = new TFile( "/Users/jdb/bnl/work/upc/embedding/nhitsdedx/output_tpc_corr.root" );
-		hUpcEmb_TpcNHDCorr = (TH1F*)fUpcEmbTpcNHDCorr->Get( "hCorr" )->Clone( "hUpcEmb_TpcNHDCorr" );
 		
-		LOG_F( INFO, "hUpcEmb_NHFCorr=%p", hUpcEmb_NHFCorr );
-		LOG_F( INFO, "hUpcEmb_NHDCorr=%p", hUpcEmb_NHDCorr );
 
 
 
 		string EFFICIENCY = config.get<string>( "p.EFFICIENCY", "NOMINAL" );
 		LOG_F( INFO, "EFFICIENCY = %s", EFFICIENCY.c_str() );
+
+		/********************************************************************************************/
+		// Setup the NHDedx correction
+		TFile * fUpcEmbTpcNHDCorr = new TFile( TString::Format( "/Users/jdb/bnl/work/upc/embedding/nhitsdedx/output_tpc_corr_%s.root", EFFICIENCY.c_str() ) );
+		hUpcEmb_TpcNHDCorr = (TH1F*)fUpcEmbTpcNHDCorr->Get( "hCorr" )->Clone( "hUpcEmb_TpcNHDCorr" );
+
+		/********************************************************************************************/
+
+		LOG_F( INFO, "hUpcEmb_NHDCorr=%p", hUpcEmb_NHDCorr );
+
+
 		/********************************************************************************************/
 		// Setup the embedding RECO efficiency (final used versions)
 		TFile * fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_mass_%s.root", EFFICIENCY.c_str()) );
@@ -222,6 +232,11 @@ public:
 		fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_DeltaPhi_%s.root", EFFICIENCY.c_str()) );
 		hRecoDeltaPhi = (TH1*)fReco->Get("eff_mDeltaPhi")->Clone( "hRecoDeltaPhi" );
 
+		fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_3D_mpty_%s.root", EFFICIENCY.c_str()) );
+		hRecoMassPtRapidity = (TH1*)fReco->Get("eff")->Clone( "hRecoMassPtRapidity" );
+		fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_3D_mcty_%s.root", EFFICIENCY.c_str()) );
+		hRecoMassCosThetaRapidity = (TH1*)fReco->Get("eff")->Clone( "hRecoMassCosThetaRapidity" );
+
 
 		{
 			LOG_SCOPE_F( INFO, "TPC Reco Efficiency Tables" );
@@ -231,6 +246,8 @@ public:
 			LOG_F( INFO, "hRecoRapidity = %p", hRecoRapidity );
 			LOG_F( INFO, "hRecoCosTheta = %p", hRecoCosTheta );
 			LOG_F( INFO, "hRecoDeltaPhi = %p", hRecoDeltaPhi );
+			LOG_F( INFO, "hRecoMassPtRapidity = %p", hRecoMassPtRapidity );	
+			LOG_F( INFO, "hRecoMassCosThetaRapidity = %p", hRecoMassCosThetaRapidity );
 		}
 
 
@@ -337,34 +354,12 @@ public:
 	}
 protected:
 
-
-	float upcEmbNHFCorr( float pt ){
-
-		if ( pt >= 0.3 ) return 1.0;
-		TAxis * ax = hUpcEmb_NHFCorr->GetXaxis();
-
-		int im = ax->FindBin( pt );
-		float v = 1 - hUpcEmb_NHFCorr->Interpolate( im );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-		return 1.0 / ( v );
-	}
-
-	// float upcEmbNHDCorr( float pt ){
-		
-	// 	if ( pt >= 0.3 ) return 1.0;
-
-	// 	TAxis * ax = hUpcEmb_NHDCorr->GetXaxis();
-
-	// 	int im = ax->FindBin( pt );
-	// 	float v = 1 - hUpcEmb_NHDCorr->Interpolate( pt );
-	// 	if ( 0 == v || 1.0/v != 1.0/v )
-	// 		return 0;
-	// 	return 1.0 / ( v );
-	// }
+	/**************************************************/
+	// Applies the hHitsDedx correction
 	float upcEmbTpcNHDCorr( float pt ){
 		
-		if ( pt >= 2.5 ) return 1.0;
+		if ( pt >= 1.0 ) 
+			pt = 0.9;
 
 		TAxis * ax = hUpcEmb_TpcNHDCorr->GetXaxis();
 
@@ -376,133 +371,8 @@ protected:
 		return 1.0/v ;
 	}
 
-	float upcEmbTpcEffW( float m ){
-
-		TAxis * ax = hUpcEmb_TpcEffVsMass->GetXaxis();
-
-		int im = ax->FindBin( m );
-		float v = hUpcEmb_TpcEffVsMass->Interpolate( m );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-		// LOG_F( INFO, "TPC Eff( M=%f, bin=%d ) = 1.0 / %f = %f", m, im, v, (1.0/v) );
-		return 1.0 / ( v );
-	}
-
-	float upcEmbTofEffW( float m ){
-
-		TAxis * ax = hUpcEmb_TofEffVsMass->GetXaxis();
-
-		int im = ax->FindBin( m );
-		float v = hUpcEmb_TofEffVsMass->GetBinContent( im );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-		return 1.0 / ( v );
-	}
-
-
-	float tpcEfficiencyWeight( float p, float m ){
-
-		TAxis * ax = hEff->GetXaxis();
-		TAxis * ay = hEff->GetYaxis();
-
-		int ip = ax->FindBin( p );
-		int im = ay->FindBin( m );
-
-		float v = hEff->GetBinContent( ip, im );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-
-		hSampleMassEff->Fill( m, v );
-		hSampleMassEffw->Fill( m );
-
-		// cout << "Eff( m="<<m << ", p=" << p << " ) = " << v << endl;
-
-		return 1.0 / ( v );
-
-	}
-
-	float tpcEfficiencyWeight( float m ){
-
-		TAxis * ax = hVPMassEff->GetXaxis();
-
-		int im = ax->FindBin( m );
-
-		float v = hVPMassEff->GetBinContent( im );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-
-		// cout << "E1D (pT = " << pt << " ) = " << v << endl;
-
-		return 1.0 / ( v );
-
-	}
-
-	float tpcEfficiencyWeightSL( float pt ){
-
-		TAxis * ax = hSLMassEff->GetXaxis();
-
-		int ipt = ax->FindBin( pt );
-
-		float v = hSLMassEff->GetBinContent( ipt );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-
-		return 1.0 / ( v );
-
-	}
-
-	float tpcEfficiencyWeightSL( float p, float m ){
-
-		TAxis * ax = hSLEff->GetXaxis();
-		TAxis * ay = hSLEff->GetYaxis();
-
-		int ip = ax->FindBin( p );
-		int im = ay->FindBin( m );
-
-		float v = hSLEff->GetBinContent( ip, im );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-
-		return 1.0 / ( v );
-
-	}
-
-
-	float tpcEfficiencyWeightCosTheta( float m, float costheta ){
-
-		TAxis * ax = hCosThetaEff->GetXaxis();
-		TAxis * ay = hCosThetaEff->GetYaxis();
-
-		int ix = ax->FindBin( m );
-		int iy = ay->FindBin( costheta );
-
-		float v = ( hCosThetaEff->GetBinContent( ix, iy ) );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-
-		return 1.0 / v;
-
-	}
-
-	float tpcEfficiencyWeight( float p, float m, float y ){
-
-		TAxis * ax = hEff3D->GetXaxis();
-		TAxis * ay = hEff3D->GetYaxis();
-		TAxis * az = hEff3D->GetZaxis();
-
-		int iX = ax->FindBin( y );
-		int iY = ay->FindBin( p );
-		int iZ = az->FindBin( m );
-
-		float v = ( hEff3D->GetBinContent( iX, iY, iZ ) );
-		if ( 0 == v || 1.0/v != 1.0/v )
-			return 0;
-		return 1.0 / ( hEff3D->GetBinContent( iX, iY, iZ ) );
-
-	}
-
-
-
+	/**************************************************/
+	// Generic 1D efficiency correction
 	float weight1DEff( TH1 * table, float x ){
 		assert( table );
 
@@ -515,7 +385,8 @@ protected:
 		return 1/v;
 	}
 
-
+	/**************************************************/
+	// Generic 3D efficiency correction
 	float weight3DEff( TH3 * table, float x, float y, float z ){
 		assert( table );
 
@@ -675,6 +546,8 @@ protected:
 		float w_RECO_pt2      = weight1DEff( hRecoPt2, lv.Pt()*lv.Pt() );
 		float w_RECO_y        = weight1DEff( hRecoRapidity, lv.Rapidity() );
 		float w_RECO_CosTheta = weight1DEff( hRecoCosTheta, costheta );
+		float w_RECO_mpty     = weight3DEff( hRecoMassPtRapidity, lv.Rapidity(), lv.Pt(), lv.M() );
+		float w_RECO_mcty     = weight3DEff( hRecoMassPtRapidity, lv.Rapidity(), costheta, lv.M() );
 
 
 		float w_TOF_3D       = weight3DEff( hTOFCosTheta_Rapidity_Mass, lv.M(), lv.Rapidity(), costheta );
@@ -716,10 +589,10 @@ protected:
 			book->fill( "tpc_signal_pt_mass", lv.M(), w_RECO_mass );
 
 			book->fill( "ulsid", lv.M(), lv.Pt(), ScaleFactor );
-			book->fill( "w1ulsid", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
-			float totalCorr = upcEmbTpcEffW( lv.M() ) * upcEmbTpcNHDCorr( pair->d1_mPt ) * upcEmbTpcNHDCorr( pair->d2_mPt );
-			book->fill( "wculsid", lv.M(), lv.Pt(), totalCorr );
-			book->fill( "wulsid", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
+			// book->fill( "w1ulsid", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
+			// float totalCorr = upcEmbTpcEffW( lv.M() ) * upcEmbTpcNHDCorr( pair->d1_mPt ) * upcEmbTpcNHDCorr( pair->d2_mPt );
+			// book->fill( "wculsid", lv.M(), lv.Pt(), totalCorr );
+			// book->fill( "wulsid", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
 
 			book->fill( "chipidSel", x2pipi, x2ee );
 			book->fill( "mass_chipidSel", lv.M(), x2ee );
@@ -760,8 +633,8 @@ protected:
 				TVector3 vD1( lv1.Px(), lv1.Py(), lv1.Pz() );
 				TVector3 vD2( lv2.Px(), lv2.Py(), lv2.Pz() );
 				
-				book->fill( "tpc_wdeltaPhi_pd1_fold", foldPi(lv1.DeltaPhi( lv )), totalCorr );
-				book->fill( "tpc_wdeltaPhi_pd1_2fold", foldPi2(lv1.DeltaPhi( lv )), totalCorr );
+				// book->fill( "tpc_wdeltaPhi_pd1_fold", foldPi(lv1.DeltaPhi( lv )), totalCorr );
+				// book->fill( "tpc_wdeltaPhi_pd1_2fold", foldPi2(lv1.DeltaPhi( lv )), totalCorr );
 
 			}
 
@@ -847,13 +720,13 @@ protected:
 				book->fill( "mvspphi", lv2.Phi(), lv.M() );
 				book->fill( "mvsdphi", lv1.DeltaPhi( lv2 ), lv.M() );
 
-				float upcembeffw1d = upcEmbTpcEffW( lv.M() ) * upcEmbTofEffW( lv.M() );
-				book->fill( "wulsid2", lv.M(), lv.Pt(), upcembeffw1d );
-				book->fill( "wTPCulsid2", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
-				book->fill( "wTOFulsid2", lv.M(), lv.Pt(), upcEmbTofEffW( lv.M() ) );
-				book->fill( "wOLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.Pt(), lv.M() ) );
-				book->fill( "w1ulsid2", lv.M(), lv.Pt(), upcembeffw1d );
-				book->fill( "w1OLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.M() ) );
+				// float upcembeffw1d = upcEmbTpcEffW( lv.M() ) * upcEmbTofEffW( lv.M() );
+				// book->fill( "wulsid2", lv.M(), lv.Pt(), upcembeffw1d );
+				// book->fill( "wTPCulsid2", lv.M(), lv.Pt(), upcEmbTpcEffW( lv.M() ) );
+				// book->fill( "wTOFulsid2", lv.M(), lv.Pt(), upcEmbTofEffW( lv.M() ) );
+				// book->fill( "wOLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.Pt(), lv.M() ) );
+				// book->fill( "w1ulsid2", lv.M(), lv.Pt(), upcembeffw1d );
+				// book->fill( "w1OLDulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeightSL( lv.M() ) );
 
 
 				
@@ -861,52 +734,80 @@ protected:
 				// LOG_F( INFO, "corrNHD = %f ( pt1=%f, pt2=%f, M=%f )", corrNHD, pair->d1_mPt, pair->d2_mPt, lv.M()  );
 				if ( lv.Pt() < 0.15 ){
 					//  Main signal histogram
+
+					/*******************************/
+					// RAW Signal
 					book->fill( "signal0_pt_mass", lv.M(), lv.Pt() );
 					book->fill( "signal0_y_mass", lv.M(), lv.Rapidity() );
 					book->fill( "signal0_pt2_mass", lv.M(), lv.Pt()*lv.Pt() ); 
 					book->fill( "signal0_costheta_mass", lv.M(), costheta );
+					book->fill( "signal0_dphi0_mass", lv.M(), dPhi_pd1 );
+					book->fill( "signal0_dphi1_mass", lv.M(), dPhi_pd1_fold );
+					book->fill( "signal0_dphi2_mass", lv.M(), dPhi_pd1_fold2 );
 
-					book->fill( "signal1_pt_mass", lv.M(), lv.Pt(), w_RECO_mass );
-					book->fill( "signal1_y_mass", lv.M(), lv.Rapidity(), w_RECO_y );
-					book->fill( "signal1_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO_mass ); // not a typo, no dependence on pt2 so use mass eff
-					book->fill( "signal1_costheta_mass", lv.M(), costheta, w_RECO_CosTheta );
+					
+					float w_RECO = w_RECO_mcty;
+					/*******************************/
+					// RAW Signal + TPC Eff
+					book->fill( "signal1_pt_mass", lv.M(), lv.Pt(), w_RECO );
+					book->fill( "signal1_y_mass", lv.M(), lv.Rapidity(), w_RECO );
+					book->fill( "signal1_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO ); 
+					book->fill( "signal1_costheta_mass", lv.M(), costheta, w_RECO );
+					book->fill( "signal1_dphi0_mass", lv.M(), dPhi_pd1, w_RECO );
+					book->fill( "signal1_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO );
+					book->fill( "signal1_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO );
 
-					// Add in the TOF corr
-					book->fill( "signal2_pt_mass", lv.M(), lv.Pt(), w_RECO_mass *  w_TOF_mass );
-					book->fill( "signal2_y_mass", lv.M(), lv.Rapidity(), w_RECO_y *  w_TOF_y );
-					book->fill( "signal2_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO_mass *  w_TOF_mass ); // not a typo, no dependence on pt2 so use mass eff
-					book->fill( "signal2_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta );
+					float w_TOF = w_TOF_3D;
+					/*******************************/
+					// RAW Signal + TPC Eff + TOF
+					book->fill( "signal2_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF );
+					book->fill( "signal2_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF );
+					book->fill( "signal2_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF ); 
+					book->fill( "signal2_costheta_mass", lv.M(), costheta, w_RECO *  w_TOF );
+					book->fill( "signal2_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF );
+					book->fill( "signal2_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF );
+					book->fill( "signal2_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF );
 
-					// Add in the TOF PID corr
-					book->fill( "signal3_pt_mass", lv.M(), lv.Pt(), w_RECO_mass *  w_TOF_mass * w_TOFPID_mass );
-					book->fill( "signal3_y_mass", lv.M(), lv.Rapidity(), w_RECO_y *  w_TOF_y * w_TOFPID_y );
-					book->fill( "signal3_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO_mass *  w_TOF_mass * w_TOFPID_mass ); // not a typo, no dependence on pt2 so use mass eff
-					book->fill( "signal3_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID_CosTheta );
+					/*******************************/
+					// RAW Signal + TPC Eff + TOF + TOF PID
+					book->fill( "signal3_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID_y );
+					book->fill( "signal3_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID_y );
+					book->fill( "signal3_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID_mass ); 
+					book->fill( "signal3_costheta_mass", lv.M(), costheta, w_RECO *  w_TOF * w_TOFPID_CosTheta );
+					book->fill( "signal3_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID_mass );
+					book->fill( "signal3_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID_mass );
+					book->fill( "signal3_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID_mass );
 
-					book->fill( "signal4_pt_mass", lv.M(), lv.Pt(), w_RECO_mass *  w_TOF_mass * w_TOFPID_mass * corrNHD );
-					book->fill( "signal4_y_mass", lv.M(), lv.Rapidity(), w_RECO_y *  w_TOF_y * w_TOFPID_y * corrNHD );
-					book->fill( "signal4_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO_mass *  w_TOF_mass * w_TOFPID_mass * corrNHD ); // not a typo, no dependence on pt2 so use mass eff
-					book->fill( "signal4_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID_CosTheta * corrNHD );
+					/*******************************/
+					// RAW Signal + TPC Eff + TOF + TOF PID + NHDCorr
+					book->fill( "signal4_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID_y * corrNHD );
+					book->fill( "signal4_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID_y * corrNHD );
+					book->fill( "signal4_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID_mass * corrNHD ); 
+					book->fill( "signal4_costheta_mass", lv.M(), costheta, w_RECO *  w_TOF * w_TOFPID_CosTheta * corrNHD );
+					book->fill( "signal4_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
+					book->fill( "signal4_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
+					book->fill( "signal4_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
 
-					book->fill( "signal1d_mass", lv.M(), w_RECO_mass * w_TOF_mass * w_TOFPID_mass );
-					book->fill( "signal3d_mass", lv.M(), w_RECO_mass * w_TOF_3D * w_TOFPID_mass );
-					book->fill( "signal3dNHD_mass", lv.M(), w_RECO_mass * w_TOF_3D * w_TOFPID_mass * corrNHD );
+
+					book->fill( "signal1d_mass", lv.M(), w_RECO_mass * w_TOF * w_TOFPID_mass );
+					book->fill( "signal3d_mass", lv.M(), w_RECO * w_TOF_3D * w_TOFPID_mass );
+					book->fill( "signal3dNHD_mass", lv.M(), w_RECO * w_TOF_3D * w_TOFPID_mass * corrNHD );
 					
 				}
 
-				book->fill( "wvpulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-				book->fill( "wvp1ulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.M() ) );
-				book->fill( "wrapid2", lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-				book->fill( "wpt2id2", lv.M(), lv.Pt() * lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				// book->fill( "wvpulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				// book->fill( "wvp1ulsid2", lv.M(), lv.Pt(), tpcEfficiencyWeight( lv.M() ) );
+				// book->fill( "wrapid2", lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				// book->fill( "wpt2id2", lv.M(), lv.Pt() * lv.Pt(), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
 				book->fill( "noCorr",  lv.M() );
-				float corrNHF = upcEmbNHFCorr( pair->d1_mPt ) * upcEmbNHFCorr( pair->d2_mPt );
+				// float corrNHF = upcEmbNHFCorr( pair->d1_mPt ) * upcEmbNHFCorr( pair->d2_mPt );
 				// float corrNHD = upcEmbNHDCorr( pair->d1_mPt ) * upcEmbNHDCorr( pair->d2_mPt );
-				book->fill( "nhfCorr", lv.M(), corrNHF );
+				// book->fill( "nhfCorr", lv.M(), corrNHF );
 				book->fill( "nhdCorr", lv.M(), corrNHD );
-				book->fill( "nhCorr",  lv.M(), corrNHF * corrNHD );
+				// book->fill( "nhCorr",  lv.M(), corrNHF * corrNHD );
 
-				book->fill( "wculsid2", lv.M(), lv.Pt(), upcembeffw1d * corrNHF * corrNHD );
+				// book->fill( "wculsid2", lv.M(), lv.Pt(), upcembeffw1d * corrNHF * corrNHD );
 
 
 				/***************************************************/
@@ -931,16 +832,16 @@ protected:
 
 
 				// LOG_F( INFO, "3D eff factor (%f, %f, %f) = %f", lv.Pt(), lv.M(), lv.Rapidity(), tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() ) );
-				float e3d = tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() );
-				book->fill( "w3ulsid2", lv.M(), lv.Pt(), e3d );
-				book->fill( "w3culsid2", lv.M(), lv.Pt(), e3d * corrNHD );
-				book->fill( "w3rapid2", lv.M(), lv.Rapidity(), e3d );
-				book->fill( "w3pt2id2", lv.M(), lv.Pt() * lv.Pt(), e3d );
+				// float e3d = tpcEfficiencyWeight( lv.Pt(), lv.M(), lv.Rapidity() );
+				// book->fill( "w3ulsid2", lv.M(), lv.Pt(), e3d );
+				// book->fill( "w3culsid2", lv.M(), lv.Pt(), e3d * corrNHD );
+				// book->fill( "w3rapid2", lv.M(), lv.Rapidity(), e3d );
+				// book->fill( "w3pt2id2", lv.M(), lv.Pt() * lv.Pt(), e3d );
 
 				
 
-				book->fill( "w3costhetaid2", lv.M(), abs(costheta), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-				book->fill( "w2costhetaid2", lv.M(), abs(costheta), tpcEfficiencyWeightCosTheta( lv.M(), abs(costheta) ) );
+				// book->fill( "w3costhetaid2", lv.M(), abs(costheta), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				// book->fill( "w2costhetaid2", lv.M(), abs(costheta), tpcEfficiencyWeightCosTheta( lv.M(), abs(costheta) ) );
 
 
 				book->fill( "chipidcutSel", x2pipi, x2ee );
@@ -963,27 +864,27 @@ protected:
 
 					book->fill( "deltaPhi_pd1_fold", foldPi(lv1.DeltaPhi( lv )) );
 
-					book->fill( "wdeltaPhi_pd1", lv1.DeltaPhi( lv ), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-					book->fill( "wdeltaPhi_pd2", lv.DeltaPhi( lv2 ), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1", lv1.DeltaPhi( lv ), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd2", lv.DeltaPhi( lv2 ), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
-					book->fill( "wdeltaPhi_pd1_fold", foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-					book->fill( "wdeltaPhi_pd1_2fold", foldPi2(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1_fold", foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1_2fold", foldPi2(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
 
 					book->fill( "deltaAngle_pd1", vD2.Angle( vD1 ) );
 					book->fill( "deltaAngle_pd2", vParent.Angle( vD2 ) );
 
-					book->fill( "wdeltaPhi_pd1_fold_pt", lv.Pt(), foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1_fold_pt", lv.Pt(), foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
 				}
 
 				if ( lv.M() > 0.4 && lv.M() < 3.0 ){
-					book->fill( "wdeltaPhi_pd1_fold_all", foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
-					book->fill( "wdeltaPhi_pd1_2fold_all", foldPi2(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1_fold_all", foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+					// book->fill( "wdeltaPhi_pd1_2fold_all", foldPi2(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 				}
 
 				book->fill( "deltaPhi_pd1_fold_mass", lv.M(), foldPi(lv1.DeltaPhi( lv )) );
-				book->fill( "wdeltaPhi_pd1_fold_mass", lv.M(), foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
+				// book->fill( "wdeltaPhi_pd1_fold_mass", lv.M(), foldPi(lv1.DeltaPhi( lv )), tpcEfficiencyWeight( lv.Pt(), lv.M() ) );
 
 				book->fill( "mDCA", pair->d1_mDCA );
 				book->fill( "mDCA", pair->d2_mDCA );
