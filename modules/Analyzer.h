@@ -122,6 +122,9 @@ protected:
 	TH1 * hTOFPIDCosTheta = nullptr;
 	TH1 * hTOFPIDDeltaPhi = nullptr; // folded2 version
 	/***************/
+
+
+	float x2eeEfficiencyWeight = 1.0;
 	
 
 public:
@@ -233,9 +236,9 @@ public:
 		hRecoDeltaPhi = (TH1*)fReco->Get("eff_mDeltaPhi")->Clone( "hRecoDeltaPhi" );
 
 		fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_3D_mpty_%s.root", EFFICIENCY.c_str()) );
-		hRecoMassPtRapidity = (TH1*)fReco->Get("eff")->Clone( "hRecoMassPtRapidity" );
+		hRecoMassPtRapidity = (TH3*)fReco->Get("eff")->Clone( "hRecoMassPtRapidity" );
 		fReco = new TFile(  TString::Format("/Users/jdb/bnl/work/upc/embedding/output_eff_3D_mcty_%s.root", EFFICIENCY.c_str()) );
-		hRecoMassCosThetaRapidity = (TH1*)fReco->Get("eff")->Clone( "hRecoMassCosThetaRapidity" );
+		hRecoMassCosThetaRapidity = (TH3*)fReco->Get("eff")->Clone( "hRecoMassCosThetaRapidity" );
 
 
 		{
@@ -350,6 +353,17 @@ public:
 		hSampleMassEff->Reset();
 		hSampleMassEffw = (TH1*)hSLMassEff->Clone( "hSampleMassEffw" );
 		hSampleMassEffw->Reset();
+
+
+		// Set the X2ee Cut efficiency factor
+		// Separate analysis see AN
+		if ( XeeCut > 8 )
+			x2eeEfficiencyWeight = 1.0;
+		if ( 4 == (int)XeeCut )
+			x2eeEfficiencyWeight = 1.059550466; // = (1.0 / 0.94379648);
+		if ( 2 == (int)XeeCut )
+			x2eeEfficiencyWeight = 1.312872461; // = (1.0 / 0.76168861);
+
 
 	}
 protected:
@@ -787,6 +801,16 @@ protected:
 					book->fill( "signal4_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
 					book->fill( "signal4_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
 					book->fill( "signal4_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID_mass * corrNHD );
+
+					/*******************************/
+					// RAW Signal + TPC Eff + TOF + TOF PID + NHDCorr + X2eeEfficiency
+					book->fill( "signal4_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID_y * corrNHD * x2eeEfficiencyWeight );
+					book->fill( "signal4_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID_y * corrNHD * x2eeEfficiencyWeight );
+					book->fill( "signal4_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID_mass * corrNHD * x2eeEfficiencyWeight ); 
+					book->fill( "signal4_costheta_mass", lv.M(), costheta, w_RECO *  w_TOF * w_TOFPID_CosTheta * corrNHD * x2eeEfficiencyWeight );
+					book->fill( "signal4_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID_mass * corrNHD * x2eeEfficiencyWeight );
+					book->fill( "signal4_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID_mass * corrNHD * x2eeEfficiencyWeight );
+					book->fill( "signal4_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID_mass * corrNHD * x2eeEfficiencyWeight );
 
 
 					book->fill( "signal1d_mass", lv.M(), w_RECO_mass * w_TOF * w_TOFPID_mass );
