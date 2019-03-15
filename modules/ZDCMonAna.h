@@ -138,7 +138,7 @@ protected:
 				book->fill( "ZDCNoCut1", event->mZDCEast, event->mZDCWest );
 			}
 
-			if ( event->mNBTofMatched >= 1 ){
+			if ( event->mNTracks == 2 ){
 				book->fill( "ZDCNoCut2", event->mZDCEast, event->mZDCWest );
 			}
 		}
