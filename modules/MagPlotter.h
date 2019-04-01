@@ -194,8 +194,8 @@ public:
 		hUU4060->Draw( "same e" );
 		hAuAu4060->Draw( "same pe" );
 		hAuAu6080->Draw( "same pe" );
-		hUPC2004->Draw( "same pe" );
-		hUPCUU->Draw( "same pe" );
+		// hUPC2004->Draw( "same pe" );
+		// hUPCUU->Draw( "same pe" );
 		hUPCAuAu->Draw( "same pe" );
 		hUPCJPsi->Draw( "same pe" );
 		hUUJPsi->Draw( "same pe" );
@@ -209,9 +209,10 @@ public:
 		if ( true == config.get<bool>( "drawSTARLight", false ) ){
 			rpl.style( tl ).set( config, "style.hSLAuAu" );
 			tl->DrawLine( -1, 1398.76, 0, 1398.76 );
+			tl->DrawLine( 31, 2550.64, 32, 2550.64 );
+			 
+			// rpl.style( tl ).set( config, "style.hSLUU" );
 			
-			rpl.style( tl ).set( config, "style.hSLUU" );
-			tl->DrawLine( -1, 1169.64, 0, 1169.64 );
 		}
 
 
@@ -233,8 +234,8 @@ public:
 		TLatex lt;
 		lt.SetTextFont(42);
 		lt.SetTextSize(16.0 / 360.0);
-		lt.DrawLatexNDC( 0.52, 0.22, "0.40 < M_{ee} < 0.76 GeV/c^{2}" );
-		lt.DrawLatexNDC( 0.48, 0.17, "2004 UPC : 0.14 < M_{ee} < 0.265 GeV/c^{2}" );
+		lt.DrawLatexNDC( 0.52, 0.17, "0.40 < M_{ee} < 0.76 GeV/c^{2}" );
+		// lt.DrawLatexNDC( 0.48, 0.17, "2004 UPC : 0.14 < M_{ee} < 0.265 GeV/c^{2}" );
 
 		TLegend * leg1 = new TLegend( 0.15, 0.51, 0.60, 0.9 );
 		leg1->SetNColumns(2);
@@ -245,13 +246,13 @@ public:
 		leg1->AddEntry( hUU4060, "40-60% U+U", "pE1" );
 		leg1->AddEntry( hAuAu4060, "40-60% Au+Au", "pE1" );
 
-		leg1->AddEntry( hUPCUU, "UPC U+U", "pE1" );
+		// leg1->AddEntry( hUPCUU, "UPC U+U", "pE1" );
 		leg1->AddEntry( hUPCAuAu, "UPC Au+Au", "pE1" );
-		leg1->AddEntry( hUPC2004, "UPC Au+Au (2004)", "pE1" );
+		// leg1->AddEntry( hUPC2004, "UPC Au+Au (2004)", "pE1" );
 		// use the fit objects because they have the same color for now
 		if ( true == config.get<bool>( "drawSTARLight", false ) ){
-			leg1->AddEntry( hSLAuAu, "#splitline{#gamma#gamma #rightarrow ee}{(STARLight Au+Au)}", "l" );
-			leg1->AddEntry( hSLUU, "#splitline{#gamma#gamma #rightarrow ee}{(STARLight U+U)}", "l" );
+			leg1->AddEntry( hSLAuAu, "#gamma#gamma #rightarrow e^{+}e^{-}", "l" );
+			// leg1->AddEntry( hSLUU, "#splitline{#gamma#gamma #rightarrow ee}{(STARLight U+U)}", "l" );
 		}
 		// leg1->AddEntry( hZha, "#gamma#gamma #rightarrow ee (Zha et al.)", "p" );
 		leg1->Draw("Same");
