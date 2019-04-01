@@ -825,13 +825,15 @@ protected:
 					/*******************************/
 					// RAW Signal
 					book->fill( "signal0_pt_mass", lv.M(), lv.Pt() );
-					book->fill( "signal0_y_mass", lv.M(), lv.Rapidity() );
 					book->fill( "signal0_pt2_mass", lv.M(), lv.Pt()*lv.Pt() ); 
-					book->fill( "signal0_costheta_mass", lv.M(), costheta );
-					book->fill( "signal0_dphi0_mass", lv.M(), dPhi_pd1 );
-					book->fill( "signal0_dphi1_mass", lv.M(), dPhi_pd1_fold );
-					book->fill( "signal0_dphi2_mass", lv.M(), dPhi_pd1_fold2 );
-					book->fill( "signal0_dphi3_mass", lv.M(), abs(dPhi_pd1) );
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal0_y_mass", lv.M(), lv.Rapidity() );
+						book->fill( "signal0_costheta_mass", lv.M(), costheta );
+						book->fill( "signal0_dphi0_mass", lv.M(), dPhi_pd1 );
+						book->fill( "signal0_dphi1_mass", lv.M(), dPhi_pd1_fold );
+						book->fill( "signal0_dphi2_mass", lv.M(), dPhi_pd1_fold2 );
+						book->fill( "signal0_dphi3_mass", lv.M(), abs(dPhi_pd1) );
+					}
 
 					
 					float w_RECO = w_RECO_my;
@@ -839,62 +841,72 @@ protected:
 					/*******************************/
 					// RAW Signal + TPC Eff
 					book->fill( "signal1_pt_mass", lv.M(), lv.Pt(), w_RECO );
-					book->fill( "signal1_y_mass", lv.M(), lv.Rapidity(), w_RECO );
 					book->fill( "signal1_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO ); 
-					book->fill( "signal1_costheta_mass", lv.M(), costheta, w_RECO_CosTheta );
-					book->fill( "signal1_dphi0_mass", lv.M(), dPhi_pd1, w_RECO );
-					book->fill( "signal1_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO );
-					book->fill( "signal1_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO );
-					book->fill( "signal1_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO );
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal1_y_mass", lv.M(), lv.Rapidity(), w_RECO );
+						book->fill( "signal1_costheta_mass", lv.M(), costheta, w_RECO_CosTheta );
+						book->fill( "signal1_dphi0_mass", lv.M(), dPhi_pd1, w_RECO );
+						book->fill( "signal1_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO );
+						book->fill( "signal1_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO );
+						book->fill( "signal1_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO );
+					}
 
 					float w_TOF = w_TOF_3D;
 					book->fill( "efficiency2_vs_mass", lv.M(), w_TOF );
 					/*******************************/
 					// RAW Signal + TPC Eff + TOF
 					book->fill( "signal2_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF );
-					book->fill( "signal2_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF );
 					book->fill( "signal2_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF ); 
-					book->fill( "signal2_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta );
-					book->fill( "signal2_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF );
-					book->fill( "signal2_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF );
-					book->fill( "signal2_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF );
-					book->fill( "signal2_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF );
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal2_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF );
+						book->fill( "signal2_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta );
+						book->fill( "signal2_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF );
+						book->fill( "signal2_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF );
+						book->fill( "signal2_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF );
+						book->fill( "signal2_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF );
+					}
 
 					float w_TOFPID = 1.0 / ( ddTofEff * tofTimeEff );
 					/*******************************/
 					// RAW Signal + TPC Eff + TOF + TOF PID
 					book->fill( "signal3_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID );
-					book->fill( "signal3_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID );
 					book->fill( "signal3_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID ); 
-					book->fill( "signal3_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID );
-					book->fill( "signal3_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID );
-					book->fill( "signal3_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID );
-					book->fill( "signal3_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID );
-					book->fill( "signal3_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID );
-
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal3_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID );
+						book->fill( "signal3_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID );
+						book->fill( "signal3_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID );
+						book->fill( "signal3_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID );
+						book->fill( "signal3_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID );
+						book->fill( "signal3_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID );
+					}
 
 					book->fill( "efficiency3_vs_mass", lv.M(), corrNHD );
 					/*******************************/
 					// RAW Signal + TPC Eff + TOF + TOF PID + NHDCorr
 					book->fill( "signal4_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID * corrNHD );
-					book->fill( "signal4_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID * corrNHD );
+					
 					book->fill( "signal4_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID * corrNHD ); 
-					book->fill( "signal4_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID * corrNHD );
-					book->fill( "signal4_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID * corrNHD );
-					book->fill( "signal4_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID * corrNHD );
-					book->fill( "signal4_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID * corrNHD );
-					book->fill( "signal4_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID * corrNHD );
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal4_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID * corrNHD );
+						book->fill( "signal4_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID * corrNHD );
+						book->fill( "signal4_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID * corrNHD );
+						book->fill( "signal4_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID * corrNHD );
+						book->fill( "signal4_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID * corrNHD );
+						book->fill( "signal4_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID * corrNHD );
+					}
 
 					/*******************************/
 					// RAW Signal + TPC Eff + TOF + TOF PID + NHDCorr + X2eeEfficiency
 					book->fill( "signal5_pt_mass", lv.M(), lv.Pt(), w_RECO *  w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
-					book->fill( "signal5_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
 					book->fill( "signal5_pt2_mass", lv.M(), lv.Pt()*lv.Pt(), w_RECO *  w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight ); 
-					book->fill( "signal5_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
-					book->fill( "signal5_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
-					book->fill( "signal5_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
-					book->fill( "signal5_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
-					book->fill( "signal5_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+					if ( lv.Pt() < 0.10 ){
+						book->fill( "signal5_y_mass", lv.M(), lv.Rapidity(), w_RECO *  w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+						book->fill( "signal5_costheta_mass", lv.M(), costheta, w_RECO_CosTheta *  w_TOF_CosTheta * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+						book->fill( "signal5_dphi0_mass", lv.M(), dPhi_pd1, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+						book->fill( "signal5_dphi1_mass", lv.M(), dPhi_pd1_fold, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+						book->fill( "signal5_dphi2_mass", lv.M(), dPhi_pd1_fold2, w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+						book->fill( "signal5_dphi3_mass", lv.M(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
+					}
 
 					if ( lv.M() > 0.4 && lv.M() < 0.76 )
 						book->fill( "signal5_dphi3_pt_mass0", lv.Pt(), abs(dPhi_pd1), w_RECO * w_TOF * w_TOFPID * corrNHD * x2eeEfficiencyWeight );
