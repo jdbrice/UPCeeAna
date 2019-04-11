@@ -588,10 +588,15 @@ protected:
 		// Compute the cos(theta)
 		TLorentzVector lvPositron = lv2;
 		lvPositron.Boost( -(lv.BoostVector()) );
-		TVector3 vbeam(0, 0, 1.0);
+		// TVector3 vbeam(0, 0, 1.0);
 
-		TVector3 vPositron( lvPositron.Px(), lvPositron.Py(), lvPositron.Pz() );
-		float costheta = abs(cos( vPositron.Angle( vbeam ) ));
+		// TVector3 vPositron( lvPositron.Px(), lvPositron.Py(), lvPositron.Pz() );
+		// float costheta = abs(cos( vPositron.Angle( vbeam ) ));
+
+		TLorentzVector lvbeam;
+		lvbeam.SetPxPyPzE( 0, 0, sqrt( 100*100 - 0.938*0.938 ), 100 );
+		lvbeam.Boost( -(lv.BoostVector()) );
+		float costheta = cos( lvPositron.Angle( lvbeam.Vect() ) );
 		/***************************************************************************************/
 
 
@@ -916,11 +921,11 @@ protected:
 					book->fill( "signal3d_mass", lv.M(), w_RECO * w_TOF_3D * w_TOFPID_mass );
 					book->fill( "signal3dNHD_mass", lv.M(), w_RECO * w_TOF_3D * w_TOFPID_mass * corrNHD );
 
-					if ( lv.M() < 0.6 && lv.M() > 0.5 && lv.Pt() < 0.45 ){
-						LOG_F( INFO, "-------------------------" );
-						LOG_F( INFO, "\"pxyz\":[%f, %f, %f]", lv1.Px(), lv1.Py(), lv1.Pz() );
-						LOG_F( INFO, "\"pxyz\":[%f, %f, %f]", lv2.Px(), lv2.Py(), lv2.Pz() );
-					}
+					// if ( lv.M() < 0.6 && lv.M() > 0.5 && lv.Pt() < 0.45 ){
+					// 	LOG_F( INFO, "-------------------------" );
+					// 	LOG_F( INFO, "\"pxyz\":[%f, %f, %f]", lv1.Px(), lv1.Py(), lv1.Pz() );
+					// 	LOG_F( INFO, "\"pxyz\":[%f, %f, %f]", lv2.Px(), lv2.Py(), lv2.Pz() );
+					// }
 					
 				}
 

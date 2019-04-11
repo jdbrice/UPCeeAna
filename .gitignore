@@ -8,3 +8,4 @@
 bin/compare-pid.root.xml
 *.eps
 log
+.vscode/

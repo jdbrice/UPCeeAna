@@ -31,26 +31,26 @@ public:
 		gStyle->SetLineWidth(2);
 
 		int Nbins = 500;
-		TH1F * hAll = new TH1F( "bAll", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hAuAu = new TH1F( "bAuAu", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUU = new TH1F( "bUU", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAll = new TH1F( "bAll", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAuAu = new TH1F( "bAuAu", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUU = new TH1F( "bUU", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
 
-		TH1F * hAuAu6080 = new TH1F( "bAuAu6080", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hAuAu4060 = new TH1F( "bAuAu4060", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUU6080   = new TH1F( "bUU6080", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUU4060   = new TH1F( "bUU4060", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUPC2004  = new TH1F( "bUPC2004", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUPCAuAu  = new TH1F( "bUPCAuAu", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUPCUU    = new TH1F( "bUPCUU", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAuAu6080 = new TH1F( "bAuAu6080", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAuAu4060 = new TH1F( "bAuAu4060", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUU6080   = new TH1F( "bUU6080", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUU4060   = new TH1F( "bUU4060", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUPC2004  = new TH1F( "bUPC2004", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUPCAuAu  = new TH1F( "bUPCAuAu", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUPCUU    = new TH1F( "bUPCUU", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
 
-		TH1F * hUPCJPsi    = new TH1F( "bUPCJPsi", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hUUJPsi    = new TH1F( "bUUJPsi", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hAuAuJPsi    = new TH1F( "bAuAuJPsi", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUPCJPsi    = new TH1F( "bUPCJPsi", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hUUJPsi    = new TH1F( "bUUJPsi", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAuAuJPsi    = new TH1F( "bAuAuJPsi", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
 
-		TH1F * hZha    = new TH1F( "bZha", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hSLAuAu = new TH1F( "bSLAuAu", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hSLUU = new TH1F( "bSLUU", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
-		TH1F * hAllFit = new TH1F( "bAllFit", ";#LTB^{2}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hZha    = new TH1F( "bZha", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hSLAuAu = new TH1F( "bSLAuAu", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hSLUU = new TH1F( "bSLUU", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
+		TH1F * hAllFit = new TH1F( "bAllFit", ";#LTB^{2}_{theory}#GT (fm^{-4}); #LTp_{T}^{2}#GT (MeV/c^{2})", Nbins, -5, 50 );
 
 		double vx[1], vy[1], ey[1], ex[1];
 		vx[0] = 30.761675;
